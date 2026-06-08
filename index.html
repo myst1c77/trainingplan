@@ -1,0 +1,2015 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>МОЙ ЗАЛ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ─── RESET & VARS ─── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:         #0a0a10;
+      --bg-card:    #12121e;
+      --bg-card2:   #18182a;
+      --border:     #1e1e34;
+      --border2:    #26263e;
+      --acc:        #7c5cbf;
+      --acc-l:      rgba(124,92,191,.18);
+      --acc-glow:   rgba(124,92,191,.32);
+      --blue:       #4e8ef0;
+      --blue-l:     rgba(78,142,240,.14);
+      --amber:      #e8a838;
+      --amber-l:    rgba(232,168,56,.14);
+      --green:      #3ecf8e;
+      --green-l:    rgba(62,207,142,.12);
+      --red:        #f05c5c;
+      --red-l:      rgba(240,92,92,.12);
+      --pink:       #d46bf0;
+      --text:       #e8e8f4;
+      --muted:      #6a6a98;
+      --dim:        #38385a;
+      --r:          16px;
+      --rs:         10px;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: radial-gradient(circle, rgba(255,255,255,.025) 1px, transparent 1px);
+      background-size: 30px 30px;
+      pointer-events: none; z-index: 0;
+    }
+    h1,h2,h3,h4 { font-family: 'Oswald', sans-serif; letter-spacing: .02em; }
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--acc); }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      height: 62px;
+      background: rgba(10,10,16,.88);
+      backdrop-filter: blur(24px) saturate(1.6);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center;
+      padding: 0 clamp(16px,4vw,52px); gap: 28px;
+    }
+    .nav-logo {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.25rem; font-weight: 700; letter-spacing: .1em;
+      background: linear-gradient(120deg, var(--acc), var(--blue));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; white-space: nowrap;
+    }
+    .nav-links { list-style: none; display: flex; gap: 3px; margin-left: auto; }
+    .nav-links a {
+      text-decoration: none; color: var(--muted);
+      font-size: .83rem; font-weight: 500;
+      padding: 6px 13px; border-radius: 8px;
+      transition: all .22s; white-space: nowrap;
+    }
+    .nav-links a:hover { color: var(--text); background: var(--bg-card2); }
+    .hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      cursor: pointer; padding: 5px; margin-left: auto;
+    }
+    .hamburger span {
+      display: block; width: 22px; height: 2px;
+      background: var(--text); border-radius: 2px;
+      transition: all .28s;
+    }
+    .nav-mob {
+      display: none; position: fixed;
+      top: 62px; left: 0; right: 0; z-index: 999;
+      background: rgba(10,10,16,.97);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 18px;
+    }
+    .nav-mob.open { display: block; }
+    .nav-mob a {
+      display: block; padding: 11px 14px;
+      color: var(--muted); text-decoration: none;
+      font-size: .9rem; font-weight: 500;
+      border-radius: 8px; transition: all .2s;
+    }
+    .nav-mob a:hover { color: var(--text); background: var(--bg-card2); }
+    @media(max-width:768px){
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+    }
+
+    /* ─── LAYOUT ─── */
+    main { padding-top: 62px; }
+    .section {
+      padding: 88px clamp(16px,4vw,52px);
+      max-width: 1300px; margin: 0 auto;
+      position: relative; z-index: 1;
+    }
+    .sec-lbl {
+      font-size: .7rem; text-transform: uppercase;
+      letter-spacing: .14em; color: var(--acc);
+      font-weight: 600; margin-bottom: 8px;
+    }
+    .sec-title {
+      font-size: clamp(1.9rem,4.5vw,2.8rem);
+      font-weight: 700; margin-bottom: 12px;
+    }
+    .sec-desc { color: var(--muted); max-width: 520px; font-size: .93rem; }
+    .sec-head { margin-bottom: 46px; }
+
+    /* ─── HERO ─── */
+    #hero {
+      min-height: calc(100vh - 62px);
+      display: flex; align-items: center; justify-content: center;
+      text-align: center;
+      padding: 60px clamp(16px,5vw,52px);
+      position: relative; overflow: hidden; z-index: 1;
+    }
+    .hero-glow-1 {
+      position: absolute; top: 20%; left: 50%;
+      transform: translate(-50%,-50%);
+      width: 1000px; height: 700px;
+      background: radial-gradient(ellipse, rgba(124,92,191,.1) 0%, transparent 68%);
+      pointer-events: none;
+    }
+    .hero-glow-2 {
+      position: absolute; bottom: 5%; right: 5%;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(78,142,240,.07) 0%, transparent 68%);
+      pointer-events: none;
+    }
+    .hero-content { position: relative; z-index: 1; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--bg-card); border: 1px solid var(--border);
+      padding: 6px 18px; border-radius: 100px;
+      font-size: .72rem; color: var(--muted);
+      margin-bottom: 30px;
+      text-transform: uppercase; letter-spacing: .09em;
+    }
+    .badge-dot {
+      width: 7px; height: 7px; background: var(--green);
+      border-radius: 50%; animation: blink 2.2s infinite;
+    }
+    @keyframes blink {
+      0%,100%{opacity:1;box-shadow:0 0 7px var(--green)}
+      50%{opacity:.35;box-shadow:none}
+    }
+    .hero h1 {
+      font-size: clamp(3.2rem,10vw,7rem);
+      font-weight: 700; line-height: 1.04;
+      margin-bottom: 22px;
+    }
+    .hero h1 .grad {
+      background: linear-gradient(140deg, var(--acc) 0%, var(--blue) 55%, var(--amber) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-sub {
+      font-size: 1.05rem; color: var(--muted);
+      max-width: 450px; margin: 0 auto 52px;
+    }
+    .hero-stats {
+      display: flex; gap: 40px;
+      justify-content: center; flex-wrap: wrap;
+    }
+    .hs { text-align: center; }
+    .hs-val {
+      font-family: 'Oswald', sans-serif;
+      font-size: 2.4rem; font-weight: 700; line-height: 1;
+      background: linear-gradient(135deg, var(--acc), var(--blue));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; display: block; margin-bottom: 4px;
+    }
+    .hs-lbl {
+      font-size: .7rem; color: var(--muted);
+      text-transform: uppercase; letter-spacing: .08em;
+    }
+    .hs-div { width: 1px; height: 40px; background: var(--border); align-self: center; }
+    @media(max-width:480px){ .hs-div{display:none} .hero-stats{gap:22px} }
+
+    /* ─── КБЖУ ─── */
+    .kbzu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(198px,1fr));
+      gap: 16px; margin-bottom: 22px;
+    }
+    .kbzu-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 24px 22px;
+      position: relative; overflow: hidden;
+      transition: transform .3s, border-color .3s, box-shadow .3s;
+      cursor: default;
+    }
+    .kbzu-card:hover { transform: translateY(-4px); }
+    .kbzu-card::before {
+      content: ''; position: absolute;
+      top: 0; left: 0; right: 0; height: 3px;
+    }
+    .kbzu-card.kal::before   { background: linear-gradient(90deg,var(--amber),var(--red)); }
+    .kbzu-card.prot::before  { background: linear-gradient(90deg,var(--blue),var(--acc)); }
+    .kbzu-card.fat::before   { background: linear-gradient(90deg,var(--amber),#f5e060); }
+    .kbzu-card.carb::before  { background: linear-gradient(90deg,var(--green),var(--blue)); }
+    .kbzu-card.kal:hover  { border-color:var(--amber); box-shadow:0 8px 32px rgba(232,168,56,.14); }
+    .kbzu-card.prot:hover { border-color:var(--blue);  box-shadow:0 8px 32px rgba(78,142,240,.14); }
+    .kbzu-card.fat:hover  { border-color:#f5e060;      box-shadow:0 8px 32px rgba(245,224,96,.12); }
+    .kbzu-card.carb:hover { border-color:var(--green); box-shadow:0 8px 32px rgba(62,207,142,.12); }
+    .kbzu-icon { font-size: 1.6rem; margin-bottom: 12px; line-height: 1; }
+    .kbzu-lbl {
+      font-size: .7rem; text-transform: uppercase;
+      letter-spacing: .1em; color: var(--muted); margin-bottom: 8px;
+    }
+    .kbzu-val {
+      font-family: 'Oswald', sans-serif;
+      font-size: 2.8rem; font-weight: 700; line-height: 1;
+    }
+    .kbzu-card.kal  .kbzu-val { color: var(--amber); }
+    .kbzu-card.prot .kbzu-val { color: var(--blue); }
+    .kbzu-card.fat  .kbzu-val { color: #f5e060; }
+    .kbzu-card.carb .kbzu-val { color: var(--green); }
+    .kbzu-unit { font-size: .9rem; color: var(--muted); font-weight: 400; }
+    .kbzu-bar {
+      margin-top: 16px; height: 3px;
+      background: var(--border); border-radius: 2px; overflow: hidden;
+    }
+    .kbzu-fill {
+      height: 100%; border-radius: 2px;
+      transform-origin: left;
+      animation: growFill 1.4s .4s cubic-bezier(.4,0,.2,1) both;
+    }
+    @keyframes growFill { from{transform:scaleX(0)} to{transform:scaleX(1)} }
+    .kbzu-card.kal  .kbzu-fill { background:linear-gradient(90deg,var(--amber),var(--red));  width:100%; }
+    .kbzu-card.prot .kbzu-fill { background:linear-gradient(90deg,var(--blue),var(--acc));   width:87%; }
+    .kbzu-card.fat  .kbzu-fill { background:linear-gradient(90deg,var(--amber),#f5e060);     width:35%; }
+    .kbzu-card.carb .kbzu-fill { background:linear-gradient(90deg,var(--green),var(--blue)); width:84%; }
+    .kbzu-note {
+      display: flex; gap: 10px;
+      background: var(--acc-l); border: 1px solid rgba(124,92,191,.25);
+      border-radius: var(--rs); padding: 14px 16px;
+      font-size: .82rem; color: var(--muted);
+    }
+    .kbzu-note strong { color: var(--acc); }
+
+    /* ─── WEEK BAR ─── */
+    .week-bar {
+      display: grid; grid-template-columns: repeat(7,1fr);
+      gap: 8px; margin-bottom: 40px;
+    }
+    @media(max-width:600px){ .week-bar { grid-template-columns:repeat(4,1fr); gap:6px; } }
+    .wc {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--rs); padding: 11px 6px;
+      text-align: center; cursor: pointer;
+      transition: all .22s; user-select: none;
+      position: relative;
+    }
+    .wc.train  { border-color:rgba(124,92,191,.4); background:rgba(124,92,191,.06); }
+    .wc.cardio { border-color:rgba(78,142,240,.4);  background:rgba(78,142,240,.05); }
+    .wc.rest   { opacity: .4; pointer-events: none; cursor: default; }
+    .wc.done   { border-color:rgba(62,207,142,.5)!important; background:rgba(62,207,142,.07)!important; }
+    .wc .wc-name {
+      font-family: 'Oswald', sans-serif;
+      font-size: .82rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: .06em;
+      margin-bottom: 3px;
+    }
+    .wc .wc-type { font-size: .62rem; text-transform: uppercase; letter-spacing: .04em; }
+    .wc.train  .wc-type  { color: var(--acc); }
+    .wc.cardio .wc-type  { color: var(--blue); }
+    .wc.rest   .wc-type  { color: var(--dim); }
+    .wc.done   .wc-type  { color: var(--green); }
+    .wc-check {
+      position: absolute; top: 5px; right: 6px;
+      font-size: .58rem; color: var(--green);
+      opacity: 0; transition: opacity .2s;
+    }
+    .wc.done .wc-check { opacity: 1; }
+
+    /* ─── TABS ─── */
+    .tabs-row {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 5px;
+      display: flex; gap: 5px; margin-bottom: 34px;
+      flex-wrap: wrap;
+    }
+    .tab-btn {
+      flex: 1; min-width: 130px;
+      padding: 13px 16px; border: none; background: transparent;
+      color: var(--muted);
+      font-family: 'Oswald', sans-serif;
+      font-size: .92rem; font-weight: 500; letter-spacing: .04em;
+      cursor: pointer;
+      border-radius: calc(var(--r) - 3px);
+      transition: all .24s; text-align: center;
+    }
+    .tab-btn:hover { color: var(--text); background: var(--bg-card2); }
+    .tab-btn.active {
+      background: linear-gradient(135deg, var(--acc), var(--blue));
+      color: #fff;
+      box-shadow: 0 4px 20px var(--acc-glow);
+    }
+    .tab-sub {
+      display: block; font-size: .62rem; opacity: .65;
+      margin-bottom: 1px; text-transform: uppercase; letter-spacing: .1em;
+    }
+    .tab-pane { display: none; animation: fadeUp .32s ease; }
+    .tab-pane.active { display: block; }
+    @keyframes fadeUp {
+      from{opacity:0;transform:translateY(10px)}
+      to{opacity:1;transform:translateY(0)}
+    }
+
+    /* ─── EXERCISE GRID ─── */
+    .ex-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px,1fr));
+      gap: 16px;
+    }
+    @media(max-width:740px){ .ex-grid { grid-template-columns: 1fr; } }
+
+    /* ─── EXERCISE CARD ─── */
+    .ex-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--r); overflow: hidden;
+      transition: border-color .28s, box-shadow .28s, transform .28s;
+    }
+    .ex-card:hover {
+      border-color: rgba(124,92,191,.42);
+      box-shadow: 0 8px 40px rgba(0,0,0,.32);
+      transform: translateY(-2px);
+    }
+    .ex-head {
+      padding: 16px 17px 13px;
+      display: flex; gap: 13px; align-items: flex-start;
+      border-bottom: 1px solid var(--border);
+    }
+    .ex-num {
+      width: 33px; height: 33px;
+      background: linear-gradient(135deg, var(--acc), var(--blue));
+      border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Oswald', sans-serif;
+      font-size: .92rem; font-weight: 700; color: #fff; flex-shrink: 0;
+    }
+    .ex-title-wrap { flex: 1; }
+    .ex-name {
+      font-size: .98rem; font-weight: 600;
+      margin-bottom: 7px; line-height: 1.3;
+    }
+    .mtag {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: .65rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .06em;
+      padding: 3px 10px; border-radius: 100px;
+    }
+    .mt-sho { background:var(--acc-l); border:1px solid rgba(124,92,191,.3); color:var(--acc); }
+    .mt-tri { background:var(--amber-l); border:1px solid rgba(232,168,56,.3); color:var(--amber); }
+    .mt-cor { background:var(--red-l); border:1px solid rgba(240,92,92,.3); color:var(--red); }
+    .mt-bac { background:var(--blue-l); border:1px solid rgba(78,142,240,.3); color:var(--blue); }
+    .mt-bic { background:var(--green-l); border:1px solid rgba(62,207,142,.3); color:var(--green); }
+    .mt-low { background:rgba(212,107,240,.1); border:1px solid rgba(212,107,240,.28); color:var(--pink); }
+
+    /* sets row */
+    .ex-stats {
+      padding: 13px 15px; display: flex;
+      gap: 7px; flex-wrap: wrap;
+    }
+    .ex-foot {
+      padding: 0 15px 12px;
+      display: flex; gap: 8px; align-items: center;
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+    .sp {
+      flex: 1; min-width: 60px; background: var(--bg-card2);
+      border-radius: 8px; padding: 8px 5px; text-align: center;
+    }
+    .sp .sv {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.18rem; font-weight: 600; color: var(--text); line-height: 1;
+    }
+    .sp .sl {
+      font-size: .62rem; text-transform: uppercase;
+      letter-spacing: .06em; color: var(--muted); margin-top: 3px;
+    }
+    .rest-pill {
+      display: flex; align-items: center; gap: 5px;
+      background: var(--bg-card2); border-radius: 8px;
+      padding: 8px 11px; font-size: .73rem; color: var(--muted); white-space: nowrap;
+    }
+    .timer-btn {
+      display: flex; align-items: center; gap: 6px;
+      background: var(--bg-card2); border: 1px solid var(--border);
+      border-radius: 8px; padding: 8px 13px;
+      font-family: 'Oswald', sans-serif;
+      font-size: .83rem; color: var(--muted);
+      cursor: pointer; transition: all .24s; white-space: nowrap;
+    }
+    .timer-btn:hover { border-color:var(--acc); color:var(--acc); }
+    .timer-btn.running { border-color:var(--green); color:var(--green); background:var(--green-l); }
+    .timer-btn.expired { border-color:var(--acc); color:var(--acc); background:var(--acc-l); animation:pingPulse .5s ease; }
+    @keyframes pingPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.04)} }
+
+    /* accordions */
+    .ex-acc { padding: 9px 12px; display: flex; flex-direction: column; gap: 6px; }
+    .ac {
+      border: 1px solid var(--border); border-radius: var(--rs); overflow: hidden;
+    }
+    .ac-btn {
+      width: 100%; padding: 10px 13px;
+      background: var(--bg-card2); border: none; color: var(--text);
+      display: flex; align-items: center; gap: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: .78rem; font-weight: 600;
+      cursor: pointer; text-align: left; transition: background .2s;
+    }
+    .ac-btn:hover { background: rgba(124,92,191,.12); }
+    .ac-ic { font-size: .92rem; }
+    .ac-arr {
+      margin-left: auto; color: var(--dim); font-size: .68rem;
+      transition: transform .28s;
+    }
+    .ac-btn.open .ac-arr { transform: rotate(180deg); }
+    .ac-body {
+      display: none; padding: 11px 13px;
+      background: var(--bg-card);
+      border-top: 1px solid var(--border);
+    }
+    .ac-body.open { display: block; animation: fadeUp .22s ease; }
+    .tech-list {
+      list-style: none; display: flex;
+      flex-direction: column; gap: 7px;
+    }
+    .tech-list li {
+      display: flex; gap: 9px;
+      font-size: .78rem; color: var(--muted); line-height: 1.55;
+    }
+    .t-n {
+      width: 17px; height: 17px; flex-shrink: 0;
+      background: linear-gradient(135deg, var(--acc), var(--blue));
+      border-radius: 5px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .58rem; font-weight: 700; color: #fff; margin-top: 1px;
+    }
+    .err-list {
+      list-style: none; display: flex; flex-direction: column; gap: 6px;
+    }
+    .err-list li {
+      display: flex; gap: 8px;
+      font-size: .78rem; color: var(--muted); line-height: 1.55;
+    }
+    .err-i {
+      width: 15px; height: 15px; flex-shrink: 0;
+      background: var(--red-l); border: 1px solid rgba(240,92,92,.3);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .56rem; font-weight: 900; color: var(--red); margin-top: 2px;
+    }
+
+    /* ─── CARDIO ─── */
+    .cardio-summary {
+      display: grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr));
+      gap: 14px; margin-bottom: 38px;
+    }
+    .c-sum-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 18px 20px;
+    }
+    .c-sum-card .cs-val {
+      font-family: 'Oswald', sans-serif;
+      font-size: 2rem; font-weight: 700; color: var(--blue);
+    }
+    .c-sum-card .cs-lbl {
+      font-size: .7rem; text-transform: uppercase;
+      letter-spacing: .08em; color: var(--muted);
+    }
+    .timeline {
+      display: flex; flex-direction: column;
+    }
+    .tl-item {
+      display: flex; gap: 18px;
+    }
+    .tl-connector {
+      display: flex; flex-direction: column; align-items: center;
+      flex-shrink: 0; width: 18px;
+    }
+    .tl-dot {
+      width: 13px; height: 13px; border-radius: 50%; flex-shrink: 0;
+      margin-top: 18px; box-shadow: 0 0 0 3px var(--bg);
+    }
+    .tl-seg { flex: 1; width: 2px; background: var(--border); margin: 3px 0; min-height: 16px; }
+    .tl-item:last-child .tl-seg { display: none; }
+    .tl-card {
+      flex: 1; margin-bottom: 14px;
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 18px 20px;
+      transition: border-color .24s;
+    }
+    .tl-card:hover { border-color: rgba(78,142,240,.35); }
+    .tl-phase {
+      font-family: 'Oswald', sans-serif;
+      font-size: .66rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: .1em;
+      margin-bottom: 3px;
+    }
+    .tl-title {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.05rem; font-weight: 600; margin-bottom: 10px;
+    }
+    .tl-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+    .chip {
+      background: var(--bg-card2); border-radius: 7px;
+      padding: 6px 12px; font-size: .73rem; color: var(--muted);
+    }
+    .chip strong {
+      color: var(--text); display: block;
+      font-family: 'Oswald', sans-serif; font-size: .9rem;
+    }
+    .hiit-grid { margin-top: 14px; display: flex; gap: 5px; flex-wrap: wrap; }
+    .hb {
+      padding: 5px 10px; border-radius: 6px;
+      font-size: .7rem; font-weight: 700; letter-spacing: .04em;
+    }
+    .hb.on  { background:var(--red-l); border:1px solid rgba(240,92,92,.3); color:var(--red); }
+    .hb.off { background:var(--green-l); border:1px solid rgba(62,207,142,.3); color:var(--green); }
+
+    /* ─── PROGRESS ─── */
+    #progress {
+      background: var(--bg-card);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      position: relative; z-index: 1;
+    }
+    .prog-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(285px,1fr));
+      gap: 14px;
+    }
+    .prog-card {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 16px;
+      transition: border-color .22s;
+    }
+    .prog-card:hover { border-color: rgba(124,92,191,.35); }
+    .prog-hd {
+      display: flex; align-items: center;
+      justify-content: space-between; margin-bottom: 12px;
+    }
+    .prog-name {
+      font-family: 'Oswald', sans-serif;
+      font-size: .9rem; font-weight: 600;
+    }
+    .prog-trend { font-size: .72rem; font-weight: 700; }
+    .prog-trend.up   { color: var(--green); }
+    .prog-trend.down { color: var(--red); }
+    .prog-trend.flat { color: var(--dim); }
+    .prog-inputs { display: flex; gap: 7px; margin-bottom: 9px; }
+    .pf { flex: 1; }
+    .pf label {
+      display: block; font-size: .62rem;
+      text-transform: uppercase; letter-spacing: .08em;
+      color: var(--muted); margin-bottom: 3px;
+    }
+    .pf input {
+      width: 100%; background: var(--bg-card);
+      border: 1px solid var(--border); color: var(--text);
+      padding: 7px 9px; border-radius: 7px;
+      font-size: .86rem; font-family: 'Oswald', sans-serif;
+      outline: none; transition: border-color .2s, box-shadow .2s;
+    }
+    .pf input:focus { border-color:var(--acc); box-shadow:0 0 0 3px var(--acc-glow); }
+    .prog-save {
+      width: 100%; padding: 8px;
+      background: linear-gradient(135deg, var(--acc), var(--blue));
+      border: none; border-radius: 8px; color: #fff;
+      font-family: 'Oswald', sans-serif;
+      font-size: .82rem; font-weight: 600; letter-spacing: .04em;
+      cursor: pointer; transition: opacity .2s, transform .2s;
+    }
+    .prog-save:hover { opacity: .86; transform: translateY(-1px); }
+    .prog-hist {
+      margin-top: 9px; max-height: 108px; overflow-y: auto;
+      display: flex; flex-direction: column; gap: 3px;
+    }
+    .pe {
+      display: flex; align-items: center; gap: 4px;
+      font-size: .72rem; color: var(--muted);
+      padding: 4px 8px; background: var(--bg-card); border-radius: 6px;
+    }
+    .pe .pe-date { color: var(--dim); }
+    .pe .pe-val  { color: var(--text); font-weight: 600; font-family: 'Oswald', sans-serif; flex: 1; text-align: right; }
+    .pe-del {
+      background: none; border: none; color: var(--dim);
+      cursor: pointer; font-size: .6rem; padding: 2px 5px;
+      border-radius: 4px; transition: all .2s; flex-shrink: 0;
+      line-height: 1;
+    }
+    .pe-del:hover { color: var(--red); background: var(--red-l); }
+    .prog-empty {
+      font-size: .73rem; color: var(--dim);
+      text-align: center; padding: 8px;
+      font-style: italic;
+    }
+
+    /* ─── WORKOUT LOG ─── */
+    .log-top {
+      display: flex; align-items: center;
+      justify-content: space-between; flex-wrap: wrap;
+      gap: 12px; margin-bottom: 26px;
+    }
+    .log-add-btn {
+      display: flex; align-items: center; gap: 8px;
+      background: linear-gradient(135deg, var(--acc), var(--blue));
+      border: none; color: #fff;
+      padding: 11px 22px; border-radius: var(--r);
+      font-family: 'Oswald', sans-serif;
+      font-size: .88rem; font-weight: 600; letter-spacing: .05em;
+      cursor: pointer; transition: all .24s;
+    }
+    .log-add-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px var(--acc-glow); }
+    .log-list { display: flex; flex-direction: column; gap: 9px; }
+    .log-item {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 13px 17px;
+      display: flex; align-items: center; gap: 14px;
+      transition: border-color .2s;
+    }
+    .log-item:hover { border-color: rgba(124,92,191,.3); }
+    .log-date-box {
+      background: var(--bg-card2); border-radius: 9px;
+      padding: 7px 13px; text-align: center; flex-shrink: 0;
+    }
+    .log-date-box .ldd {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.5rem; font-weight: 700; line-height: 1;
+    }
+    .log-date-box .ldm {
+      font-size: .6rem; text-transform: uppercase;
+      color: var(--muted); letter-spacing: .06em;
+    }
+    .log-info { flex: 1; }
+    .log-type {
+      font-family: 'Oswald', sans-serif;
+      font-size: .92rem; font-weight: 600; margin-bottom: 2px;
+    }
+    .log-note { font-size: .76rem; color: var(--muted); }
+    .log-del {
+      background: none; border: none; color: var(--dim);
+      cursor: pointer; font-size: 1rem; padding: 6px;
+      border-radius: 6px; transition: all .2s;
+    }
+    .log-del:hover { color: var(--red); background: var(--red-l); }
+    .log-empty {
+      text-align: center; color: var(--dim); padding: 44px 20px;
+      font-size: .88rem; border: 1px dashed var(--border); border-radius: var(--r);
+    }
+    .log-empty .log-e-ico { font-size: 2rem; display: block; margin-bottom: 8px; opacity: .4; }
+
+    /* modal */
+    .modal-bg {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,.72); backdrop-filter: blur(6px);
+      z-index: 2000; align-items: center; justify-content: center;
+    }
+    .modal-bg.open { display: flex; }
+    .modal {
+      background: var(--bg-card); border: 1px solid var(--border2);
+      border-radius: var(--r); padding: 28px;
+      width: min(480px, 94vw); animation: fadeUp .24s ease;
+    }
+    .modal h3 { font-size: 1.2rem; margin-bottom: 22px; }
+    .fr { margin-bottom: 15px; }
+    .fr label {
+      display: block; font-size: .68rem;
+      text-transform: uppercase; letter-spacing: .08em;
+      color: var(--muted); margin-bottom: 5px;
+    }
+    .fr select, .fr input, .fr textarea {
+      width: 100%; background: var(--bg-card2);
+      border: 1px solid var(--border); color: var(--text);
+      padding: 10px 13px; border-radius: 9px;
+      font-size: .9rem; font-family: 'Inter', sans-serif;
+      outline: none; transition: border-color .2s;
+    }
+    .fr select:focus, .fr input:focus, .fr textarea:focus { border-color: var(--acc); }
+    .fr textarea { resize: vertical; min-height: 76px; }
+    .modal-btns { display: flex; gap: 9px; margin-top: 20px; }
+    .btn-prim {
+      flex: 1; padding: 11px;
+      background: linear-gradient(135deg, var(--acc), var(--blue));
+      border: none; border-radius: 9px; color: #fff;
+      font-family: 'Oswald', sans-serif;
+      font-size: .88rem; font-weight: 600; cursor: pointer;
+      transition: opacity .2s;
+    }
+    .btn-prim:hover { opacity: .86; }
+    .btn-sec {
+      padding: 11px 18px; background: transparent;
+      border: 1px solid var(--border); color: var(--muted);
+      border-radius: 9px; font-family: 'Inter', sans-serif;
+      font-size: .9rem; cursor: pointer; transition: all .2s;
+    }
+    .btn-sec:hover { background: var(--bg-card2); color: var(--text); }
+
+    /* ─── FOOTER ─── */
+    footer {
+      padding: 36px 24px; text-align: center;
+      border-top: 1px solid var(--border);
+      color: var(--dim); font-size: .76rem;
+      position: relative; z-index: 1;
+    }
+    footer span { color: var(--muted); }
+
+    /* ─── SCROLL ANIMATION ─── */
+    .fu {
+      opacity: 0; transform: translateY(26px);
+      transition: opacity .55s ease, transform .55s ease;
+    }
+    .fu.vis { opacity: 1; transform: translateY(0); }
+    .fu:nth-child(2) { transition-delay: .08s; }
+    .fu:nth-child(3) { transition-delay: .14s; }
+    .fu:nth-child(4) { transition-delay: .2s; }
+    .fu:nth-child(5) { transition-delay: .26s; }
+    .fu:nth-child(6) { transition-delay: .32s; }
+  </style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══ -->
+<nav>
+  <div class="nav-logo">⚡ МОЙ ЗАЛ</div>
+  <ul class="nav-links">
+    <li><a href="#kbzhu">КБЖУ</a></li>
+    <li><a href="#training">Тренировки</a></li>
+    <li><a href="#progress">Прогресс</a></li>
+    <li><a href="#log">Дневник</a></li>
+  </ul>
+  <div class="hamburger" id="hbg" onclick="toggleMobNav()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+<div class="nav-mob" id="navMob">
+  <a href="#kbzhu"    onclick="closeMob()">КБЖУ</a>
+  <a href="#training" onclick="closeMob()">Тренировки</a>
+  <a href="#progress" onclick="closeMob()">Прогресс</a>
+  <a href="#log"      onclick="closeMob()">Дневник</a>
+</div>
+
+<main>
+
+<!-- ═══ HERO ═══ -->
+<section id="hero">
+  <div class="hero-glow-1"></div>
+  <div class="hero-glow-2"></div>
+  <div class="hero-content">
+    <div class="hero-badge"><span class="badge-dot"></span>Активный режим — Пн · Ср · Сб</div>
+    <h1>
+      МОЙ<br>
+      <span class="grad">ЛИЧНЫЙ ЗАЛ</span>
+    </h1>
+    <p class="hero-sub">Всё для тренировок в одном месте — расписание, техника, КБЖУ и прогресс.</p>
+    <div class="hero-stats">
+      <div class="hs"><span class="hs-val">3</span><span class="hs-lbl">Дня в неделю</span></div>
+      <div class="hs-div"></div>
+      <div class="hs"><span class="hs-val">14</span><span class="hs-lbl">Упражнений</span></div>
+      <div class="hs-div"></div>
+      <div class="hs"><span class="hs-val">1845</span><span class="hs-lbl">Ккал / день</span></div>
+      <div class="hs-div"></div>
+      <div class="hs"><span class="hs-val">160г</span><span class="hs-lbl">Белка / день</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ КБЖУ ═══ -->
+<section id="kbzhu">
+  <div class="section">
+    <div class="sec-head fu">
+      <div class="sec-lbl">Питание</div>
+      <h2 class="sec-title">КБЖУ на день</h2>
+      <p class="sec-desc">Суточный план макронутриентов для поддержки роста мышц и восстановления.</p>
+    </div>
+    <div class="kbzu-grid">
+      <div class="kbzu-card kal fu">
+        <div class="kbzu-icon">🔥</div>
+        <div class="kbzu-lbl">Калории</div>
+        <div class="kbzu-val">1845<span class="kbzu-unit"> ккал</span></div>
+        <div class="kbzu-bar"><div class="kbzu-fill"></div></div>
+      </div>
+      <div class="kbzu-card prot fu">
+        <div class="kbzu-icon">💪</div>
+        <div class="kbzu-lbl">Белки</div>
+        <div class="kbzu-val">160<span class="kbzu-unit"> г</span></div>
+        <div class="kbzu-bar"><div class="kbzu-fill"></div></div>
+      </div>
+      <div class="kbzu-card fat fu">
+        <div class="kbzu-icon">🥑</div>
+        <div class="kbzu-lbl">Жиры</div>
+        <div class="kbzu-val">65<span class="kbzu-unit"> г</span></div>
+        <div class="kbzu-bar"><div class="kbzu-fill"></div></div>
+      </div>
+      <div class="kbzu-card carb fu">
+        <div class="kbzu-icon">⚡</div>
+        <div class="kbzu-lbl">Углеводы</div>
+        <div class="kbzu-val">155<span class="kbzu-unit"> г</span></div>
+        <div class="kbzu-bar"><div class="kbzu-fill"></div></div>
+      </div>
+    </div>
+    <div class="kbzu-note fu">
+      💡 <span><strong>Распределение:</strong> белки дают 640 ккал (35%), жиры — 585 ккал (32%), углеводы — 620 ккал (33%). Белок — главный приоритет для синтеза мышц.</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ ТРЕНИРОВКИ ═══ -->
+<section id="training">
+  <div class="section">
+    <div class="sec-head fu">
+      <div class="sec-lbl">Расписание</div>
+      <h2 class="sec-title">План тренировок</h2>
+      <p class="sec-desc">Нажми на день недели, чтобы отметить выполненную тренировку.</p>
+    </div>
+
+    <!-- Week bar -->
+    <div class="week-bar fu" id="weekBar">
+      <div class="wc train"  data-day="mon" onclick="toggleDay('mon')">
+        <div class="wc-check">✓</div>
+        <div class="wc-name">Пн</div>
+        <div class="wc-type">Плечи · Три</div>
+      </div>
+      <div class="wc rest"   data-day="tue" onclick="toggleDay('tue')">
+        <div class="wc-check">✓</div>
+        <div class="wc-name">Вт</div>
+        <div class="wc-type">Отдых</div>
+      </div>
+      <div class="wc cardio" data-day="wed" onclick="toggleDay('wed')">
+        <div class="wc-check">✓</div>
+        <div class="wc-name">Ср</div>
+        <div class="wc-type">Кардио</div>
+      </div>
+      <div class="wc rest"   data-day="thu" onclick="toggleDay('thu')">
+        <div class="wc-check">✓</div>
+        <div class="wc-name">Чт</div>
+        <div class="wc-type">Отдых</div>
+      </div>
+      <div class="wc rest"   data-day="fri" onclick="toggleDay('fri')">
+        <div class="wc-check">✓</div>
+        <div class="wc-name">Пт</div>
+        <div class="wc-type">Отдых</div>
+      </div>
+      <div class="wc train"  data-day="sat" onclick="toggleDay('sat')">
+        <div class="wc-check">✓</div>
+        <div class="wc-name">Сб</div>
+        <div class="wc-type">Спина · Бицепс</div>
+      </div>
+      <div class="wc rest"   data-day="sun" onclick="toggleDay('sun')">
+        <div class="wc-check">✓</div>
+        <div class="wc-name">Вс</div>
+        <div class="wc-type">Отдых</div>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs-row fu">
+      <button class="tab-btn active" onclick="showTab('mon',this)">
+        <span class="tab-sub">Понедельник</span>ПЛЕЧИ + ТРИЦЕПС
+      </button>
+      <button class="tab-btn" onclick="showTab('wed',this)">
+        <span class="tab-sub">Среда</span>КАРДИО
+      </button>
+      <button class="tab-btn" onclick="showTab('sat',this)">
+        <span class="tab-sub">Суббота</span>СПИНА + БИЦЕПС
+      </button>
+    </div>
+
+    <!-- ── TAB MON ── -->
+    <div class="tab-pane active" id="tab-mon">
+      <div class="ex-grid">
+
+        <!-- 1 Жим гантелей -->
+        <div class="ex-card fu">
+          <div class="ex-head">
+            <div class="ex-num">1</div>
+            <div class="ex-title-wrap">
+              <div class="ex-name">Жим гантелей сидя</div>
+              <span class="mtag mt-sho">Плечи (передние + средние дельты)</span>
+            </div>
+          </div>
+          <div class="ex-stats">
+            <div class="sp"><div class="sv">4</div><div class="sl">Подх.</div></div>
+            <div class="sp"><div class="sv">10–12</div><div class="sl">Повт.</div></div>
+            <div class="sp"><div class="sv">14 кг</div><div class="sl">Вес</div></div>
+          </div>
+          <div class="ex-foot">
+            <div class="rest-pill">⏱ 90–120 с</div>
+            <button class="timer-btn" onclick="startTimer(this,90)">▶ Таймер</button>
+          </div>
+          <div class="ex-acc">
+            <div class="ac">
+              <button class="ac-btn" onclick="toggleAc(this)">
+                <span class="ac-ic">📋</span> Техника выполнения
+                <span class="ac-arr">▼</span>
+              </button>
+              <div class="ac-body">
+                <ul class="tech-list">
+                  <li><span class="t-n">1</span>Сядьте прямо, спину прижмите к спинке скамьи. Гантели у плеч на уровне ушей.</li>
+                  <li><span class="t-n">2</span>Локти направлены вниз и чуть вперёд (угол ~45°) — не разводите широко в стороны.</li>
+                  <li><span class="t-n">3</span>Жмите вверх по дуге, сближая гантели над головой. Не блокируйте локти в верхней точке.</li>
+                  <li><span class="t-n">4</span>Контролируемо опускайте в исходное положение — 2–3 секунды вниз.</li>
+                </ul>
+              </div>
+            </div>
+            <div class="ac">
+              <button class="ac-btn" onclick="toggleAc(this)">
+                <span class="ac-ic">⚠️</span> Частые ошибки
+                <span class="ac-arr">▼</span>
+              </button>
+              <div class="ac-body">
+                <ul class="err-list">
+                  <li><span class="err-i">!</span>Излишний прогиб в пояснице — это снимает нагрузку с дельт и грузит позвоночник.</li>
+                  <li><span class="err-i">!</span>Слишком широкое разведение локтей — вызывает импинджмент плечевого сустава.</li>
+                  <li><span class="err-i">!</span>Резкое бросание веса вниз — теряется контроль и нагрузка.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2 Разведение в стороны -->
+        <div class="ex-card fu">
+          <div class="ex-head">
+            <div class="ex-num">2</div>
+            <div class="ex-title-wrap">
+              <div class="ex-name">Разведение гантелей в стороны</div>
+              <span class="mtag mt-sho">Средние дельты</span>
+            </div>
+          </div>
+          <div class="ex-stats">
+            <div class="sp"><div class="sv">3</div><div class="sl">Подх.</div></div>
+            <div class="sp"><div class="sv">12–15</div><div class="sl">Повт.</div></div>
+            <div class="sp"><div class="sv">8 кг</div><div class="sl">Вес</div></div>
+          </div>
+          <div class="ex-foot">
+            <div class="rest-pill">⏱ 60–90 с</div>
+            <button class="timer-btn" onclick="startTimer(this,60)">▶ Таймер</button>
+          </div>
+          <div class="ex-acc">
+            <div class="ac">
+              <button class="ac-btn" onclick="toggleAc(this)">
+                <span class="ac-ic">📋</span> Техника выполнения
+                <span class="ac-arr">▼</span>
+              </button>
+              <div class="ac-body">
+                <ul class="tech-list">
+                  <li><span class="t-n">1</span>Стоя, лёгкий наклон корпуса вперёд 10–15° — так средняя дельта работает чище.</li>
+                  <li><span class="t-n">2</span>Небольшой изгиб в локтях на протяжении всего движения (не выпрямляйте до конца).</li>
+                  <li><span class="t-n">3</span>Поднимайте до уровня плеч, мизинец чуть выше большого пальца в верхней точке.</li>
+                  <li><span class="t-n">4</span>Медленно опускайте, не бросайте гантели — 2 секунды вниз.</li>
+                </ul>
+              </div>
+            </div>
+            <div class="ac">
+              <button class="ac-btn" onclick="toggleAc(this)">
+                <span class="ac-ic">⚠️</span> Частые ошибки
+                <span class="ac-arr">▼</span>
+              </button>
+              <div class="ac-body">
+                <ul class="err-list">
+                  <li><span class="err-i">!</span>Подъём выше уровня плеч — начнёт включаться трапеция, снимая нагрузку с дельт.</li>
+                  <li><span class="err-i">!</span>Раскачивание корпусом — инерция убивает эффект изоляции.</li>
+                  <li><span class="err-i">!</span>Слишком тяжёлый вес — это упражнение работает на «лёгком», не гонитесь за весом.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3 Face pull -->
+        <div class="ex-card fu">
+          <div class="ex-head">
+            <div class="ex-num">3</div>
+            <div class="ex-title-wrap">
+              <div class="ex-name">Face pull на блоке</div>
+              <span class="mtag mt-sho">Задние дельты · Ротаторная манжета</span>
+            </div>
+          </div>
+          <div class="ex-stats">
+            <div class="sp"><div class="sv">3</div><div class="sl">Подх.</div></div>
+            <div class="sp"><div class="sv">15–20</div><div class="sl">Повт.</div></div>
+            <div class="sp"><div class="sv">50 кг</div><div class="sl">Вес</div></div>
+          </div>
+          <div class="ex-foot">
+            <div class="rest-pill">⏱ 60–90 с</div>
+            <button class="timer-btn" onclick="startTimer(this,60)">▶ Таймер</button>
+          </div>
+          <div class="ex-acc">
+            <div class="ac">
+              <button class="ac-btn" onclick="toggleAc(this)">
+                <span class="ac-ic">📋</span> Техника выполнения
+                <span class="ac-arr">▼</span>
+              </button>
+              <div class="ac-body">
+                <ul class="tech-list">
+                  <li><span class="t-n">1</span>Установите трос на уровне лица или чуть выше, используйте верёвочную рукоять.</li>
+                  <li><span class="t-n">2</span>Тяните рукоять к переносице, разводя руки в стороны — как будто натягиваете лук.</li>
+                  <li><span class="t-n">3</span>Локти должны быть выше уровня плеч в пиковой точке — это обязательное условие.</li>
+                  <li><span class="t-n">4</span>Зафиксируйте на 1 секунду, сжимая лопатки, затем медленно возвращайте.</li>
+                </ul>
+              </div>
+            </div>
+            <div class="ac">
+              <button class="ac-btn" onclick="toggleAc(this)">
+                <span class="ac-ic">⚠️</span> Частые ошибки
+                <span class="ac-arr">▼</span>
+              </button>
+              <div class="ac-body">
+                <ul class="err-list">
+                  <li><span class="err-i">!</span>Локти ниже плеч — в такой позиции задние дельты почти не работают.</li>
+                  <li><span class="err-i">!</span>Слишком большой вес — качество движения важнее цифры на стеке.</li>
+                  <li><span class="err-i">!</span>Нет паузы в пиковой точке — теряется максимальное сокращение.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4 Французский жим -->
+        <div class="ex-card fu">
+          <div class="ex-head">
+            <div class="ex-num">4</div>
+            <div class="ex-title-wrap">
+              <div class="ex-name">Французский жим EZ</div>
+              <span class="mtag mt-tri">Трицепс (длинная головка)</span>
+            </div>
+          </div>
+          <div class="ex-stats">
+            <div class="sp"><div class="sv">3</div><div class="sl">Подх.</div></div>
+            <div class="sp"><div class="sv">10–12</div><div class="sl">Повт.</div></div>
+            <div class="sp"><div class="sv">+15 кг</div><div class="sl">Вес</div></div>
+          </div>
+          <div class="ex-foot">
+            <div class="rest-pill">⏱ 90 с</div>
+            <button class="timer-btn" onclick="startTimer(this,90)">▶ Таймер</button>
+          </div>
+          <div class="ex-acc">
+            <div class="ac">
+              <button class="ac-btn" onclick="toggleAc(this)">
+                <span class="ac-ic">📋</span> Техника выполнения
+                <span class="ac-arr">▼</span>
+              </button>
+              <div class="ac-body">
+                <ul class="tech-list">
+                  <li><span class="t-n">1</span>Лёжа на горизонтальной скамье, гриф над грудью на вытянутых руках.</li>
+                  <li><span class="t-n">2</span>Медленно опускайте гриф за голову, сгибая руки только в локтях — плечи неподвижны.</li>
+                  <li><span class="t-n">3</span>Локти смотрят строго в потолок во время всего движения — это ключевое.</li>
+                  <li><span class="t-n">4</span>Разгибайте до исходного положения — полная амплитуда даёт максимум длинной головки.</li>
+                </ul>
+              </div>
+            </div>
+            <div class="ac">
+              <button class="ac-btn" onclick="toggleAc(this)">
+                <span class="ac-ic">⚠️</span> Частые ошибки
+                <span class="ac-arr">▼</span>
+              </button>
+              <div class="ac-body">
+                <ul class="err-list">
+                  <li><span class="err-i">!</span>Локти расходятся в стороны — теряется изоляция длинной головки трицепса.</li>
+                  <li><span class="err-i">!</span>Движение плечами — это уже не французский жим, а что-то другое.</li>
+                  <li><span class="err-i">!</span>Слишком быстрое опускание — риск травмы локтевого сустава, работайте медленно.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5 Трицепс на блоке (палка) -->
+        <div class="ex-card fu">
+          <div class="ex-head">
+            <div class="ex-num">5</div>
+            <div class="ex-title-wrap">
+              <div class="ex-name">Трицепс на блоке (палка)</div>
+              <span class="mtag mt-tri">Все три головки трицепса</span>
+            </div>
+          </div>
+          <div class="ex-stats">
+            <div class="sp"><div class="sv">3</div><div class="sl">Подх.</div></div>
+            <div class="sp"><div class="sv">12–15</div><div class="sl">Повт.</div></div>
+            <div class="sp"><div class="sv">45 кг</div><div class="sl">Вес</div></div>
+          </div>
+          <div class="ex-foot">
+            <div class="rest-pill">⏱ 60–90 с</div>
+            <button class="timer-btn" onclick="startTimer(this,60)">▶ Таймер</button>
+          </div>
+          <div class="ex-acc">
+            <div class="ac">
+              <button class="ac-btn" onclick="toggleAc(this)">
+                <span class="ac-ic">📋</span> Техника выполнения
+                <span class="ac-arr">▼</span>
+              </button>
+              <div class="ac-body">
+                <ul class="tech-list">
+                  <li><span class="t-n">1</span>Станьте близко к блоку, лёгкий наклон корпуса вперёд 15–20°.</li>
+                  <li><span class="t-n">2</span>Локти прижаты к туловищу и неподвижны на протяжении всего движения.</li>
+                  <li><span class="t-n">3</span>Жмите вниз до полного разгибания — в нижней точке сделайте паузу и сожмите трицепс.</li>
+                  <li><span class="t-n">4</span>Медленно возвращайте вверх, не допуская подъёма локтей.</li>
+                </ul>
+              </div>
+            </div>
+            <div class="ac">
+              <button class="ac-btn" onclick="toggleAc(this)">
+                <span class="ac-ic">⚠️</span> Частые ошибки
+                <span class="ac-arr">▼</span>
+              </button>
+              <div class="ac-body">
+                <ul class="err-list">
+                  <li><span class="err-i">!</span>Локти уходят от тела — превращает движение в жим, включает грудь.</li>
+                  <li><span class="err-i">!</span>Помощь корпусом — раскачка = нечестные повторения, риск травмы.</li>
+                  <li><span class="err-i">!</span>Неполное разгибание в нижней точке — теряется пиковое сокращение.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 6 Трицепс обратный хват -->
+        <div class="ex-card fu">
+          <div class="ex-head">
+            <div class="ex-num">6</div>
+            <div class="ex-title-wrap">
+              <div class="ex-name">Трицепс на блоке обратным хватом</div>
+              <span class="mtag mt-tri">Медиальная головка трицепса</span>
+            </div>
+          </div>
+          <div class="ex-stats">
+            <div class="sp"><div class="sv">3</div><div class="sl">Подх.</div></div>
+            <div class="sp"><div class="sv">12–15</div><div class="sl">Повт.</div></div>
+            <div class="sp"><div class="sv">35 кг</div><div class="sl">Вес</div></div>
+          </div>
+          <div class="ex-foot">
+            <div class="rest-pill">⏱ 60–90 с</div>
+            <button class="timer-btn" onclick="startTimer(this,60)">▶ Таймер</button>
+          </div>
+          <div class="ex-acc">
+            <div class="ac">
+              <button class="ac-btn" onclick="toggleAc(this)">
+                <span class="ac-ic">📋</span> Техника выполнения
+                <span class="ac-arr">▼</span>
+              </button>
+              <div class="ac-body">
+                <ul class="tech-list">
+                  <li><span class="t-n">1</span>Хват снизу — ладони смотрят вверх (обратный хват).</li>
+                  <li><span class="t-n">2</span>Локти прижаты к телу, как и в обычном варианте — это обязательное условие.</li>
+                  <li><span class="t-n">3</span>Жмите вниз до полного разгибания, контролируя запястья.</li>
+                  <li><span class="t-n">4</span>Медленно возвращайте — не позволяйте весу тянуть руки вверх неконтролируемо.</li>
+                </ul>
+              </div>
+            </div>
+            <div class="ac">
+              <button class="ac-btn" onclick="toggleAc(this)">
+                <span class="ac-ic">⚠️</span> Частые ошибки
+                <span class="ac-arr">▼</span>
+              </button>
+              <div class="ac-body">
+                <ul class="err-list">
+                  <li><span class="err-i">!</span>Запястья провисают под весом — держите их нейтрально.</li>
+                  <li><span class="err-i">!</span>Локти уходят вперёд в верхней точке — теряется натяжение трицепса.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 7 Планка -->
+        <div class="ex-card fu">
+          <div class="ex-head">
+            <div class="ex-num">7</div>
+            <div class="ex-title-wrap">
+              <div class="ex-name">Планка</div>
+              <span class="mtag mt-cor">Кор · Поперечная м. живота</span>
+            </div>
+          </div>
+          <div class="ex-stats">
+            <div class="sp"><div class="sv">3</div><div class="sl">Подх.</div></div>
+            <div class="sp"><div class="sv">80 с</div><div class="sl">Время</div></div>
+          </div>
+          <div class="ex-foot">
+            <div class="rest-pill">⏱ Отдых 60 с</div>
+            <button class="timer-btn" onclick="startTimer(this,80)">▶ 80 сек</button>
+          </div>
+          <div class="ex-acc">
+            <div class="ac">
+              <button class="ac-btn" onclick="toggleAc(this)">
+                <span class="ac-ic">📋</span> Техника выполнения
+                <span class="ac-arr">▼</span>
+              </button>
+              <div class="ac-body">
+                <ul class="tech-list">
+                  <li><span class="t-n">1</span>Опора на предплечья (локти под плечами) и носки, тело параллельно полу.</li>
+                  <li><span class="t-n">2</span>Тело — прямая линия от пяток до затылка. Таз нейтрально.</li>
+                  <li><span class="t-n">3</span>Напрягите кор: представьте, что вас вот-вот ударят в живот.</li>
+                  <li><span class="t-n">4</span>Дышите ровно — задержка дыхания повышает давление и снижает эффект.</li>
+                </ul>
+              </div>
+            </div>
+            <div class="ac">
+              <button class="ac-btn" onclick="toggleAc(this)">
+                <span class="ac-ic">⚠️</span> Частые ошибки
+                <span class="ac-arr">▼</span>
+              </button>
+              <div class="ac-body">
+                <ul class="err-list">
+                  <li><span class="err-i">!</span>Поднятый таз — снимает нагрузку с пресса и не считается планкой.</li>
+                  <li><span class="err-i">!</span>Прогиб в пояснице — нагрузка уходит на поясницу, риск боли.</li>
+                  <li><span class="err-i">!</span>Задержка дыхания — снижает время под нагрузкой и перегружает сосуды.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 8 Скручивания / подъём ног -->
+        <div class="ex-card fu">
+          <div class="ex-head">
+            <div class="ex-num">8</div>
+            <div class="ex-title-wrap">
+              <div class="ex-name">Скручивания / подъём ног в упоре</div>
+              <span class="mtag mt-cor">Прямая мышца живота</span>
+            </div>
+          </div>
+          <div class="ex-stats">
+            <div class="sp"><div class="sv">3</div><div class="sl">Подх.</div></div>
+            <div class="sp"><div class="sv">20</div><div class="sl">Повт.</div></div>
+          </div>
+          <div class="ex-foot">
+            <div class="rest-pill">⏱ Отдых 60 с</div>
+            <button class="timer-btn" onclick="startTimer(this,60)">▶ Таймер</button>
+          </div>
+          <div class="ex-acc">
+            <div class="ac">
+              <button class="ac-btn" onclick="toggleAc(this)">
+                <span class="ac-ic">📋</span> Техника выполнения
+                <span class="ac-arr">▼</span>
+              </button>
+              <div class="ac-body">
+                <ul class="tech-list">
+                  <li><span class="t-n">1</span>Скручивания: лёжа, руки за головой, подбородок к груди — не тяните за шею.</li>
+                  <li><span class="t-n">2</span>Поднимайтесь скручиванием, не подъёмом всего туловища — верхние 30° амплитуды.</li>
+                  <li><span class="t-n">3</span>Подъём ног в упоре на локти: опора на предплечья, медленно поднимайте прямые ноги.</li>
+                  <li><span class="t-n">4</span>Контролируйте опускание — не бросайте ноги вниз, это убивает напряжение в прессе.</li>
+                </ul>
+              </div>
+            </div>
+            <div class="ac">
+              <button class="ac-btn" onclick="toggleAc(this)">
+                <span class="ac-ic">⚠️</span> Частые ошибки
+                <span class="ac-arr">▼</span>
+              </button>
+              <div class="ac-body">
+                <ul class="err-list">
+                  <li><span class="err-i">!</span>Тяга за шею руками — нагружает шейный отдел, не пресс.</li>
+                  <li><span class="err-i">!</span>Инерционные рывки — убирают постоянное напряжение с мышц живота.</li>
+                  <li><span class="err-i">!</span>Полное опускание лопаток на пол — теряется тонус пресса между повторениями.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /ex-grid -->
+    </div><!-- /tab-mon -->
+
+    <!-- ── TAB WED ── -->
+    <div class="tab-pane" id="tab-wed">
+
+      <div class="cardio-summary fu">
+        <div class="c-sum-card">
+          <div class="cs-val">~28</div>
+          <div class="cs-lbl">мин общее время</div>
+        </div>
+        <div class="c-sum-card">
+          <div class="cs-val">Level 9</div>
+          <div class="cs-lbl">основное сопротивление</div>
+        </div>
+        <div class="c-sum-card">
+          <div class="cs-val">HIIT</div>
+          <div class="cs-lbl">интервальный протокол</div>
+        </div>
+        <div class="c-sum-card">
+          <div class="cs-val">Велосипед</div>
+          <div class="cs-lbl">тип кардиотренажёра</div>
+        </div>
+      </div>
+
+      <div class="timeline fu">
+
+        <div class="tl-item">
+          <div class="tl-connector">
+            <div class="tl-dot" style="background:var(--green)"></div>
+            <div class="tl-seg"></div>
+          </div>
+          <div class="tl-card">
+            <div class="tl-phase" style="color:var(--green)">Фаза 1</div>
+            <div class="tl-title">🔄 Разминка</div>
+            <div class="tl-chips">
+              <div class="chip"><strong>5 мин</strong>Время</div>
+              <div class="chip"><strong>Level 8</strong>Сопротивление</div>
+              <div class="chip"><strong>25 speed</strong>Скорость</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-connector">
+            <div class="tl-dot" style="background:var(--red)"></div>
+            <div class="tl-seg"></div>
+          </div>
+          <div class="tl-card">
+            <div class="tl-phase" style="color:var(--red)">Фаза 2</div>
+            <div class="tl-title">⚡ HIIT — интервалы</div>
+            <div class="tl-chips">
+              <div class="chip"><strong>Level 9</strong>Сопротивление</div>
+              <div class="chip"><strong>35–40 speed</strong>Интенсив</div>
+              <div class="chip"><strong>25 speed</strong>Отдых</div>
+            </div>
+            <div class="hiit-grid">
+              <div class="hb on">🔥 30 сек</div>
+              <div class="hb off">🌬 1 мин</div>
+              <div class="hb on">🔥 30 сек</div>
+              <div class="hb off">🌬 1 мин</div>
+              <div class="hb on">🔥 30 сек</div>
+              <div class="hb off">🌬 1 мин</div>
+              <div class="hb on">🔥 30 сек</div>
+              <div class="hb off">🌬 1 мин</div>
+              <div class="hb on" style="opacity:.55">× повторять по ощущениям</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-connector">
+            <div class="tl-dot" style="background:var(--blue)"></div>
+            <div class="tl-seg"></div>
+          </div>
+          <div class="tl-card">
+            <div class="tl-phase" style="color:var(--blue)">Фаза 3</div>
+            <div class="tl-title">🚴 Равномерное кардио</div>
+            <div class="tl-chips">
+              <div class="chip"><strong>10 мин</strong>Время</div>
+              <div class="chip"><strong>Level 9</strong>Сопротивление</div>
+              <div class="chip"><strong>25 speed</strong>Скорость</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-connector">
+            <div class="tl-dot" style="background:var(--acc)"></div>
+            <div class="tl-seg"></div>
+          </div>
+          <div class="tl-card">
+            <div class="tl-phase" style="color:var(--acc)">Фаза 4</div>
+            <div class="tl-title">🧘 Заминка</div>
+            <div class="tl-chips">
+              <div class="chip"><strong>3 мин</strong>Время</div>
+              <div class="chip"><strong>Level 8</strong>Сопротивление</div>
+              <div class="chip"><strong>25 speed</strong>Скорость</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div><!-- /tab-wed -->
+
+    <!-- ── TAB SAT ── -->
+    <div class="tab-pane" id="tab-sat">
+      <div class="ex-grid">
+
+        <!-- 1 Подтягивания -->
+        <div class="ex-card fu">
+          <div class="ex-head">
+            <div class="ex-num">1</div>
+            <div class="ex-title-wrap">
+              <div class="ex-name">Подтягивания</div>
+              <span class="mtag mt-bac">Широчайшие · Бицепс</span>
+            </div>
+          </div>
+          <div class="ex-stats">
+            <div class="sp"><div class="sv">3</div><div class="sl">Подх.</div></div>
+            <div class="sp"><div class="sv">Макс</div><div class="sl">Повт.</div></div>
+          </div>
+          <div class="ex-foot">
+            <div class="rest-pill">⏱ 120–180 с</div>
+            <button class="timer-btn" onclick="startTimer(this,120)">▶ Таймер</button>
+          </div>
+          <div class="ex-acc">
+            <div class="ac">
+              <button class="ac-btn" onclick="toggleAc(this)">
+                <span class="ac-ic">📋</span> Техника выполнения
+                <span class="ac-arr">▼</span>
+              </button>
+              <div class="ac-body">
+                <ul class="tech-list">
+                  <li><span class="t-n">1</span>Хват чуть шире плеч, ладони от себя (пронация). Повисните с полным разгибанием рук.</li>
+                  <li><span class="t-n">2</span>Сведите лопатки и потяните локти вниз и назад — тяните грудь к перекладине.</li>
+                  <li><span class="t-n">3</span>Поднимайтесь до уровня, когда подбородок оказывается выше перекладины.</li>
+                  <li><span class="t-n">4</span>Медленно опускайтесь до полного разгибания — 2–3 секунды вниз.</li>
+                </ul>
+              </div>
+            </div>
+            <div class="ac">
+              <button class="ac-btn" onclick="toggleAc(this)">
+                <span class="ac-ic">⚠️</span> Частые ошибки
+                <span class="ac-arr">▼</span>
+              </button>
+              <div class="ac-body">
+                <ul class="err-list">
+                  <li><span class="err-i">!</span>Неполная амплитуда — половинчатые подтягивания не дают результата.</li>
+                  <li><span class="err-i">!</span>Раскачивание корпусом — инерция перекладывает работу с мышц спины.</li>
+                  <li><span class="err-i">!</span>Тяга преимущественно бицепсом, без активации спины — не сводите лопатки.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2 Вертикальная тяга -->
+        <div class="ex-card fu">
+          <div class="ex-head">
+            <div class="ex-num">2</div>
+            <div class="ex-title-wrap">
+              <div class="ex-name">Вертикальная тяга (верхний блок)</div>
+              <span class="mtag mt-bac">Широчайшие · Задние дельты</span>
+            </div>
+          </div>
+          <div class="ex-stats">
+            <div class="sp"><div class="sv">3</div><div class="sl">Подх.</div></div>
+            <div class="sp"><div class="sv">10–12</div><div class="sl">Повт.</div></div>
+            <div class="sp"><div class="sv">45 кг</div><div class="sl">Вес</div></div>
+          </div>
+          <div class="ex-foot">
+            <div class="rest-pill">⏱ 90–120 с</div>
+            <button class="timer-btn" onclick="startTimer(this,90)">▶ Таймер</button>
+          </div>
+          <div class="ex-acc">
+            <div class="ac">
+              <button class="ac-btn" onclick="toggleAc(this)">
+                <span class="ac-ic">📋</span> Техника выполнения
+                <span class="ac-arr">▼</span>
+              </button>
+              <div class="ac-body">
+                <ul class="tech-list">
+                  <li><span class="t-n">1</span>Хват чуть шире плеч. Зафиксируйте колени под упором. Лёгкий наклон назад 15–20°.</li>
+                  <li><span class="t-n">2</span>Потяните гриф к верхней части груди, инициируя движение сведением лопаток.</li>
+                  <li><span class="t-n">3</span>Локти ведите вниз и назад — не в стороны.</li>
+                  <li><span class="t-n">4</span>Медленно выпрямляйте руки вверху до полного растяжения широчайших.</li>
+                </ul>
+              </div>
+            </div>
+            <div class="ac">
+              <button class="ac-btn" onclick="toggleAc(this)">
+                <span class="ac-ic">⚠️</span> Частые ошибки
+                <span class="ac-arr">▼</span>
+              </button>
+              <div class="ac-body">
+                <ul class="err-list">
+                  <li><span class="err-i">!</span>Слишком сильный наклон назад — превращает упражнение в горизонтальную тягу.</li>
+                  <li><span class="err-i">!</span>Тяга только за счёт бицепса — инициируйте движение спиной, не руками.</li>
+                  <li><span class="err-i">!</span>Неполное выпрямление рук вверху — теряется растяжение широчайших.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3 Горизонтальная тяга -->
+        <div class="ex-card fu">
+          <div class="ex-head">
+            <div class="ex-num">3</div>
+            <div class="ex-title-wrap">
+              <div class="ex-name">Горизонтальная тяга (нижний блок)</div>
+              <span class="mtag mt-bac">Средняя спина · Ромбовидные</span>
+            </div>
+          </div>
+          <div class="ex-stats">
+            <div class="sp"><div class="sv">3</div><div class="sl">Подх.</div></div>
+            <div class="sp"><div class="sv">10–12</div><div class="sl">Повт.</div></div>
+            <div class="sp"><div class="sv">45 кг</div><div class="sl">Вес</div></div>
+          </div>
+          <div class="ex-foot">
+            <div class="rest-pill">⏱ 90–120 с</div>
+            <button class="timer-btn" onclick="startTimer(this,90)">▶ Таймер</button>
+          </div>
+          <div class="ex-acc">
+            <div class="ac">
+              <button class="ac-btn" onclick="toggleAc(this)">
+                <span class="ac-ic">📋</span> Техника выполнения
+                <span class="ac-arr">▼</span>
+              </button>
+              <div class="ac-body">
+                <ul class="tech-list">
+                  <li><span class="t-n">1</span>Спина прямая, лёгкий естественный прогиб в пояснице. Ноги слегка согнуты.</li>
+                  <li><span class="t-n">2</span>Тяните рукоять к поясу, ведя локти вдоль туловища назад.</li>
+                  <li><span class="t-n">3</span>В пиковой точке — пауза 1 сек, максимально сжимая лопатки вместе.</li>
+                  <li><span class="t-n">4</span>Медленно выпрямляйте руки вперёд с полным растяжением.</li>
+                </ul>
+              </div>
+            </div>
+            <div class="ac">
+              <button class="ac-btn" onclick="toggleAc(this)">
+                <span class="ac-ic">⚠️</span> Частые ошибки
+                <span class="ac-arr">▼</span>
+              </button>
+              <div class="ac-body">
+                <ul class="err-list">
+                  <li><span class="err-i">!</span>Округление спины при тяге — нагрузка уходит с мышц спины на поясницу.</li>
+                  <li><span class="err-i">!</span>Тяга только руками — без включения спины это упражнение для рук, не спины.</li>
+                  <li><span class="err-i">!</span>Раскачка корпусом вперёд-назад — инерция убивает эффективность.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4 Молотки -->
+        <div class="ex-card fu">
+          <div class="ex-head">
+            <div class="ex-num">4</div>
+            <div class="ex-title-wrap">
+              <div class="ex-name">Молотки</div>
+              <span class="mtag mt-bic">Брахиалис · Бицепс (длинная гол.)</span>
+            </div>
+          </div>
+          <div class="ex-stats">
+            <div class="sp"><div class="sv">3</div><div class="sl">Подх.</div></div>
+            <div class="sp"><div class="sv">10–12</div><div class="sl">Повт.</div></div>
+            <div class="sp"><div class="sv">14 кг</div><div class="sl">Вес</div></div>
+          </div>
+          <div class="ex-foot">
+            <div class="rest-pill">⏱ 60–90 с</div>
+            <button class="timer-btn" onclick="startTimer(this,60)">▶ Таймер</button>
+          </div>
+          <div class="ex-acc">
+            <div class="ac">
+              <button class="ac-btn" onclick="toggleAc(this)">
+                <span class="ac-ic">📋</span> Техника выполнения
+                <span class="ac-arr">▼</span>
+              </button>
+              <div class="ac-body">
+                <ul class="tech-list">
+                  <li><span class="t-n">1</span>Стоя, нейтральный хват (большой палец вверх), гантели по бокам бёдер.</li>
+                  <li><span class="t-n">2</span>Локти прижаты к туловищу и не двигаются в течение всего движения.</li>
+                  <li><span class="t-n">3</span>Поднимайте поочерёдно или одновременно — до полного сокращения с небольшой паузой.</li>
+                  <li><span class="t-n">4</span>Контролируемо опускайте до полного разгибания — не бросайте.</li>
+                </ul>
+              </div>
+            </div>
+            <div class="ac">
+              <button class="ac-btn" onclick="toggleAc(this)">
+                <span class="ac-ic">⚠️</span> Частые ошибки
+                <span class="ac-arr">▼</span>
+              </button>
+              <div class="ac-body">
+                <ul class="err-list">
+                  <li><span class="err-i">!</span>Раскачивание корпусом — типичная ошибка при подборе слишком тяжёлого веса.</li>
+                  <li><span class="err-i">!</span>Разворот запястья в супинацию — это превращает молотки в обычный подъём на бицепс.</li>
+                  <li><span class="err-i">!</span>Неполная амплитуда — брахиалис лучше всего работает при полном диапазоне движения.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5 Подъём EZ -->
+        <div class="ex-card fu">
+          <div class="ex-head">
+            <div class="ex-num">5</div>
+            <div class="ex-title-wrap">
+              <div class="ex-name">Подъём EZ-штанги на бицепс</div>
+              <span class="mtag mt-bic">Бицепс (обе головки)</span>
+            </div>
+          </div>
+          <div class="ex-stats">
+            <div class="sp"><div class="sv">3</div><div class="sl">Подх.</div></div>
+            <div class="sp"><div class="sv">8–10</div><div class="sl">Повт.</div></div>
+            <div class="sp"><div class="sv">+15 кг</div><div class="sl">Вес</div></div>
+          </div>
+          <div class="ex-foot">
+            <div class="rest-pill">⏱ 90–120 с</div>
+            <button class="timer-btn" onclick="startTimer(this,90)">▶ Таймер</button>
+          </div>
+          <div class="ex-acc">
+            <div class="ac">
+              <button class="ac-btn" onclick="toggleAc(this)">
+                <span class="ac-ic">📋</span> Техника выполнения
+                <span class="ac-arr">▼</span>
+              </button>
+              <div class="ac-body">
+                <ul class="tech-list">
+                  <li><span class="t-n">1</span>Стоя, хват EZ-грифа на изгибах (снижает нагрузку на запястья). Локти у туловища.</li>
+                  <li><span class="t-n">2</span>Поднимайте гриф до полного сокращения бицепса — не отводите локти вперёд.</li>
+                  <li><span class="t-n">3</span>Пауза в верхней точке — 1 секунда максимального напряжения.</li>
+                  <li><span class="t-n">4</span>Медленно опускайте — 2–3 секунды вниз, не бросайте гриф.</li>
+                </ul>
+              </div>
+            </div>
+            <div class="ac">
+              <button class="ac-btn" onclick="toggleAc(this)">
+                <span class="ac-ic">⚠️</span> Частые ошибки
+                <span class="ac-arr">▼</span>
+              </button>
+              <div class="ac-body">
+                <ul class="err-list">
+                  <li><span class="err-i">!</span>Раскачивание корпусом назад при подъёме — берите меньший вес.</li>
+                  <li><span class="err-i">!</span>Выдвижение локтей вперёд в верхней точке — снимает нагрузку с бицепса.</li>
+                  <li><span class="err-i">!</span>Бросание грифа при опускании — эксцентрическая фаза равноценна концентрической.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 6 Гиперэкстензия -->
+        <div class="ex-card fu">
+          <div class="ex-head">
+            <div class="ex-num">6</div>
+            <div class="ex-title-wrap">
+              <div class="ex-name">Гиперэкстензия</div>
+              <span class="mtag mt-low">Разгибатели спины · Ягодицы</span>
+            </div>
+          </div>
+          <div class="ex-stats">
+            <div class="sp"><div class="sv">3</div><div class="sl">Подх.</div></div>
+            <div class="sp"><div class="sv">12–15</div><div class="sl">Повт.</div></div>
+            <div class="sp"><div class="sv">+5 кг</div><div class="sl">Вес</div></div>
+          </div>
+          <div class="ex-foot">
+            <div class="rest-pill">⏱ 60–90 с</div>
+            <button class="timer-btn" onclick="startTimer(this,60)">▶ Таймер</button>
+          </div>
+          <div class="ex-acc">
+            <div class="ac">
+              <button class="ac-btn" onclick="toggleAc(this)">
+                <span class="ac-ic">📋</span> Техника выполнения
+                <span class="ac-arr">▼</span>
+              </button>
+              <div class="ac-body">
+                <ul class="tech-list">
+                  <li><span class="t-n">1</span>Зафиксируйте лодыжки в упоре. Тазобедренный сгиб — на уровне края подушки.</li>
+                  <li><span class="t-n">2</span>Руки за голову или удерживайте вес у груди. Начните из нижнего положения (наклон ~45°).</li>
+                  <li><span class="t-n">3</span>Поднимайте корпус до прямой линии тела — не выше, не переразгибайтесь в пояснице.</li>
+                  <li><span class="t-n">4</span>Медленно опускайтесь обратно — 2–3 секунды вниз.</li>
+                </ul>
+              </div>
+            </div>
+            <div class="ac">
+              <button class="ac-btn" onclick="toggleAc(this)">
+                <span class="ac-ic">⚠️</span> Частые ошибки
+                <span class="ac-arr">▼</span>
+              </button>
+              <div class="ac-body">
+                <ul class="err-list">
+                  <li><span class="err-i">!</span>Переразгибание поясницы в верхней точке — риск компрессии позвонков.</li>
+                  <li><span class="err-i">!</span>Рывковые быстрые движения — убирают контроль и увеличивают риск травмы.</li>
+                  <li><span class="err-i">!</span>Округление спины при опускании — держите нейтральное положение позвоночника.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /ex-grid -->
+    </div><!-- /tab-sat -->
+
+  </div><!-- /section -->
+</section><!-- /training -->
+
+<!-- ═══ ПРОГРЕСС ═══ -->
+<section id="progress">
+  <div class="section">
+    <div class="sec-head fu">
+      <div class="sec-lbl">Трекер</div>
+      <h2 class="sec-title">Мой прогресс</h2>
+      <p class="sec-desc">Записывай рабочие веса после каждой тренировки — данные сохраняются в браузере.</p>
+    </div>
+
+    <div class="prog-grid" id="progGrid">
+      <!-- generated by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ═══ ДНЕВНИК ═══ -->
+<section id="log">
+  <div class="section">
+    <div class="log-top fu">
+      <div>
+        <div class="sec-lbl">Дневник</div>
+        <h2 class="sec-title">Тренировочный журнал</h2>
+      </div>
+      <button class="log-add-btn" onclick="openModal()">+ Добавить тренировку</button>
+    </div>
+    <div class="log-list" id="logList">
+      <!-- generated by JS -->
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- modal -->
+<div class="modal-bg" id="modalBg">
+  <div class="modal">
+    <h3>Записать тренировку</h3>
+    <div class="fr">
+      <label>Дата</label>
+      <input type="date" id="mDate">
+    </div>
+    <div class="fr">
+      <label>Тип тренировки</label>
+      <select id="mType">
+        <option value="Плечи + Трицепс">Понедельник — Плечи + Трицепс</option>
+        <option value="Кардио (HIIT)">Среда — Кардио (HIIT)</option>
+        <option value="Спина + Бицепс">Суббота — Спина + Бицепс</option>
+      </select>
+    </div>
+    <div class="fr">
+      <label>Заметки (необязательно)</label>
+      <textarea id="mNote" placeholder="Как прошла тренировка? Что дал результат?"></textarea>
+    </div>
+    <div class="modal-btns">
+      <button class="btn-prim" onclick="saveLog()">Сохранить</button>
+      <button class="btn-sec" onclick="closeModal()">Отмена</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  Личный фитнес-центр &nbsp;·&nbsp; <span>МОЙ ЗАЛ</span> &nbsp;·&nbsp; Данные хранятся локально в браузере
+</footer>
+
+<script>
+/* ─── DATA ─── */
+const PROG_EXERCISES = [
+  { id: 'press_sit',   name: 'Жим гантелей сидя',        unit: 'кг/рука',   day: 'Пн' },
+  { id: 'lateral',     name: 'Разведение в стороны',      unit: 'кг/рука',   day: 'Пн' },
+  { id: 'face_pull',   name: 'Face pull',                 unit: 'кг',        day: 'Пн' },
+  { id: 'fr_press',    name: 'Французский жим EZ',        unit: 'кг доп.',   day: 'Пн' },
+  { id: 'tri_bar',     name: 'Трицепс блок (палка)',      unit: 'кг',        day: 'Пн' },
+  { id: 'tri_rev',     name: 'Трицепс обр. хват',         unit: 'кг',        day: 'Пн' },
+  { id: 'pullup',      name: 'Подтягивания',              unit: 'повт.',     day: 'Сб' },
+  { id: 'lat_pull',    name: 'Вертикальная тяга',         unit: 'кг',        day: 'Сб' },
+  { id: 'row',         name: 'Горизонтальная тяга',       unit: 'кг',        day: 'Сб' },
+  { id: 'hammer',      name: 'Молотки',                   unit: 'кг/рука',   day: 'Сб' },
+  { id: 'ez_curl',     name: 'Подъём EZ на бицепс',       unit: 'кг доп.',   day: 'Сб' },
+  { id: 'hyper',       name: 'Гиперэкстензия',            unit: 'кг доп.',   day: 'Сб' },
+];
+
+/* ─── PROGRESS CARDS ─── */
+function getHistory(id) {
+  try { return JSON.parse(localStorage.getItem('gym_prog_' + id) || '[]'); }
+  catch(e) { return []; }
+}
+function saveHistory(id, arr) {
+  localStorage.setItem('gym_prog_' + id, JSON.stringify(arr));
+}
+
+function trendIcon(arr) {
+  if (arr.length < 2) return { cls: 'flat', txt: '—' };
+  const a = parseFloat(arr[arr.length - 2].v);
+  const b = parseFloat(arr[arr.length - 1].v);
+  if (b > a) return { cls: 'up',   txt: '▲ +' + (b - a).toFixed(1) };
+  if (b < a) return { cls: 'down', txt: '▼ −' + (a - b).toFixed(1) };
+  return { cls: 'flat', txt: '→ без изм.' };
+}
+
+function buildProgCards() {
+  const grid = document.getElementById('progGrid');
+  grid.innerHTML = PROG_EXERCISES.map(ex => {
+    const hist = getHistory(ex.id);
+    const tr = trendIcon(hist);
+    const lastVal = hist.length ? hist[hist.length - 1].v : '';
+    const histHtml = hist.length
+      ? [...hist].reverse().slice(0,6).map((h, ri) => {
+          const idx = hist.length - 1 - ri;
+          return `<div class="pe"><span class="pe-date">${h.d}</span><span class="pe-val">${h.v} ${ex.unit}</span><button class="pe-del" onclick="deleteProg('${ex.id}',${idx})" title="Удалить">✕</button></div>`;
+        }).join('')
+      : `<div class="prog-empty">Нет записей</div>`;
+    return `
+      <div class="prog-card fu">
+        <div class="prog-hd">
+          <div class="prog-name">${ex.name} <span style="color:var(--dim);font-size:.7rem;font-family:'Inter'">${ex.day}</span></div>
+          <div class="prog-trend ${tr.cls}">${tr.txt}</div>
+        </div>
+        <div class="prog-inputs">
+          <div class="pf">
+            <label>${ex.unit}</label>
+            <input type="number" id="pi_${ex.id}" placeholder="${lastVal || '0'}" step="0.5" min="0">
+          </div>
+        </div>
+        <button class="prog-save" onclick="saveProg('${ex.id}','${ex.unit}')">Записать</button>
+        <div class="prog-hist" id="ph_${ex.id}">${histHtml}</div>
+      </div>`;
+  }).join('');
+}
+
+function deleteProg(id, index) {
+  const hist = getHistory(id);
+  hist.splice(index, 1);
+  saveHistory(id, hist);
+  buildProgCards();
+  applyFu();
+}
+
+function saveProg(id, unit) {
+  const inp = document.getElementById('pi_' + id);
+  const val = inp.value.trim();
+  if (!val) return;
+  const hist = getHistory(id);
+  const today = new Date().toLocaleDateString('ru-RU', { day:'numeric', month:'short' });
+  hist.push({ d: today, v: val });
+  saveHistory(id, hist);
+  inp.value = '';
+  buildProgCards();
+  applyFu();
+}
+
+/* ─── WORKOUT LOG ─── */
+function getLogs() {
+  try { return JSON.parse(localStorage.getItem('gym_log') || '[]'); }
+  catch(e) { return []; }
+}
+function saveLogs(arr) { localStorage.setItem('gym_log', JSON.stringify(arr)); }
+
+function renderLog() {
+  const logs = getLogs();
+  const el = document.getElementById('logList');
+  if (!logs.length) {
+    el.innerHTML = `<div class="log-empty"><span class="log-e-ico">📓</span>Журнал пуст — нажми «Добавить тренировку»</div>`;
+    return;
+  }
+  el.innerHTML = [...logs].reverse().map((l, ri) => {
+    const i = logs.length - 1 - ri;
+    const d = new Date(l.date);
+    const day = d.getDate();
+    const mon = d.toLocaleDateString('ru-RU', { month: 'short' });
+    return `
+      <div class="log-item">
+        <div class="log-date-box"><div class="ldd">${day}</div><div class="ldm">${mon}</div></div>
+        <div class="log-info">
+          <div class="log-type">${l.type}</div>
+          ${l.note ? `<div class="log-note">${l.note}</div>` : ''}
+        </div>
+        <button class="log-del" onclick="delLog(${i})" title="Удалить">✕</button>
+      </div>`;
+  }).join('');
+}
+
+function delLog(i) {
+  const logs = getLogs();
+  logs.splice(i, 1);
+  saveLogs(logs);
+  renderLog();
+}
+
+function openModal() {
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('mDate').value = today;
+  document.getElementById('mNote').value = '';
+  document.getElementById('modalBg').classList.add('open');
+}
+function closeModal() {
+  document.getElementById('modalBg').classList.remove('open');
+}
+function saveLog() {
+  const date = document.getElementById('mDate').value;
+  const type = document.getElementById('mType').value;
+  const note = document.getElementById('mNote').value.trim();
+  if (!date) return;
+  const logs = getLogs();
+  logs.push({ date, type, note });
+  saveLogs(logs);
+  closeModal();
+  renderLog();
+}
+document.getElementById('modalBg').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+/* ─── WEEK BAR (localStorage) ─── */
+function getWeekDone() {
+  try { return JSON.parse(localStorage.getItem('gym_week') || '{}'); }
+  catch(e) { return {}; }
+}
+function toggleDay(day) {
+  const done = getWeekDone();
+  done[day] = !done[day];
+  localStorage.setItem('gym_week', JSON.stringify(done));
+  renderWeek();
+}
+function renderWeek() {
+  const done = getWeekDone();
+  document.querySelectorAll('.wc').forEach(el => {
+    const d = el.dataset.day;
+    el.classList.toggle('done', !!done[d]);
+  });
+}
+
+/* ─── TABS ─── */
+function showTab(id, btn) {
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+/* ─── ACCORDION ─── */
+function toggleAc(btn) {
+  const body = btn.nextElementSibling;
+  const isOpen = body.classList.contains('open');
+  btn.classList.toggle('open', !isOpen);
+  body.classList.toggle('open', !isOpen);
+}
+
+/* ─── REST TIMER ─── */
+let timerInterval = null;
+function startTimer(btn, seconds) {
+  if (timerInterval) clearInterval(timerInterval);
+  document.querySelectorAll('.timer-btn').forEach(b => {
+    b.classList.remove('running', 'expired');
+    if (b !== btn) b.textContent = '▶ Таймер';
+  });
+
+  let remaining = seconds;
+  btn.classList.add('running');
+  btn.classList.remove('expired');
+
+  function tick() {
+    if (remaining <= 0) {
+      clearInterval(timerInterval);
+      btn.classList.remove('running');
+      btn.classList.add('expired');
+      btn.textContent = '✓ Готово!';
+      try { new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBuVlVgpM7UxJFwUE1cj8fdya5+X0JFVa/s6sqURjM2S6X77uyqYjMuS6T77OmmXjMuS6T77OmjWS4vTKT77OmfVCwxTaP77umeUCsxTaT87umcTSsxTqP87umaTCsxTqP87umYSiwxTqP87ueWRysyT6L87ueURispT6H87uiURispT6H87uiSRispT6H87uiPRCkqT5787uiNRCsqT5787uiLQyssUJv/7uiIQCwtUJv/7uiGPisuUJn/7uiEPCsvUZj/7+eEOisvUZj/7+eBOCwwUZf/7+iANi0xUpb/7+h+NC0yUpX/7+h8Mi0yUpX/7+h6MC4zU5T/7+h4Li40U5P/8Oh3LC41VJL/8Oh1Ki42VJL/8Oh0KC44VZH/8Ohy'); }
+      catch(e){}
+      timerInterval = null;
+      return;
+    }
+    const m = Math.floor(remaining / 60);
+    const s = remaining % 60;
+    btn.textContent = `⏱ ${m}:${s.toString().padStart(2,'0')}`;
+    remaining--;
+  }
+  tick();
+  timerInterval = setInterval(tick, 1000);
+}
+
+/* ─── SCROLL ANIMATIONS ─── */
+function applyFu() {
+  const els = document.querySelectorAll('.fu:not(.vis)');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('vis'); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.06 });
+  els.forEach(el => obs.observe(el));
+}
+
+/* ─── NAV ─── */
+function toggleMobNav() { document.getElementById('navMob').classList.toggle('open'); }
+function closeMob() { document.getElementById('navMob').classList.remove('open'); }
+
+/* ─── INIT ─── */
+document.addEventListener('DOMContentLoaded', () => {
+  buildProgCards();
+  renderLog();
+  renderWeek();
+  applyFu();
+
+  // Smooth highlight active nav on scroll
+  const sections = document.querySelectorAll('section[id]');
+  const navAs = document.querySelectorAll('.nav-links a');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        navAs.forEach(a => a.style.color = '');
+        const active = document.querySelector(`.nav-links a[href="#${e.target.id}"]`);
+        if (active) active.style.color = 'var(--acc)';
+      }
+    });
+  }, { threshold: 0.45 });
+  sections.forEach(s => obs.observe(s));
+});
+</script>
+</body>
+</html>
