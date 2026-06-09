@@ -1,2015 +1,1104 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" data-theme="dark">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>МОЙ ЗАЛ</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    /* ─── RESET & VARS ─── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --bg:         #0a0a10;
-      --bg-card:    #12121e;
-      --bg-card2:   #18182a;
-      --border:     #1e1e34;
-      --border2:    #26263e;
-      --acc:        #7c5cbf;
-      --acc-l:      rgba(124,92,191,.18);
-      --acc-glow:   rgba(124,92,191,.32);
-      --blue:       #4e8ef0;
-      --blue-l:     rgba(78,142,240,.14);
-      --amber:      #e8a838;
-      --amber-l:    rgba(232,168,56,.14);
-      --green:      #3ecf8e;
-      --green-l:    rgba(62,207,142,.12);
-      --red:        #f05c5c;
-      --red-l:      rgba(240,92,92,.12);
-      --pink:       #d46bf0;
-      --text:       #e8e8f4;
-      --muted:      #6a6a98;
-      --dim:        #38385a;
-      --r:          16px;
-      --rs:         10px;
-    }
-    html { scroll-behavior: smooth; }
-    body {
-      font-family: 'Inter', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
-      overflow-x: hidden;
-    }
-    body::before {
-      content: '';
-      position: fixed; inset: 0;
-      background-image: radial-gradient(circle, rgba(255,255,255,.025) 1px, transparent 1px);
-      background-size: 30px 30px;
-      pointer-events: none; z-index: 0;
-    }
-    h1,h2,h3,h4 { font-family: 'Oswald', sans-serif; letter-spacing: .02em; }
-    ::-webkit-scrollbar { width: 5px; }
-    ::-webkit-scrollbar-track { background: var(--bg); }
-    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-    ::-webkit-scrollbar-thumb:hover { background: var(--acc); }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TimeManager</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
-    /* ─── NAV ─── */
-    nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
-      height: 62px;
-      background: rgba(10,10,16,.88);
-      backdrop-filter: blur(24px) saturate(1.6);
-      border-bottom: 1px solid var(--border);
-      display: flex; align-items: center;
-      padding: 0 clamp(16px,4vw,52px); gap: 28px;
-    }
-    .nav-logo {
-      font-family: 'Oswald', sans-serif;
-      font-size: 1.25rem; font-weight: 700; letter-spacing: .1em;
-      background: linear-gradient(120deg, var(--acc), var(--blue));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      background-clip: text; white-space: nowrap;
-    }
-    .nav-links { list-style: none; display: flex; gap: 3px; margin-left: auto; }
-    .nav-links a {
-      text-decoration: none; color: var(--muted);
-      font-size: .83rem; font-weight: 500;
-      padding: 6px 13px; border-radius: 8px;
-      transition: all .22s; white-space: nowrap;
-    }
-    .nav-links a:hover { color: var(--text); background: var(--bg-card2); }
-    .hamburger {
-      display: none; flex-direction: column; gap: 5px;
-      cursor: pointer; padding: 5px; margin-left: auto;
-    }
-    .hamburger span {
-      display: block; width: 22px; height: 2px;
-      background: var(--text); border-radius: 2px;
-      transition: all .28s;
-    }
-    .nav-mob {
-      display: none; position: fixed;
-      top: 62px; left: 0; right: 0; z-index: 999;
-      background: rgba(10,10,16,.97);
-      backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--border);
-      padding: 10px 18px;
-    }
-    .nav-mob.open { display: block; }
-    .nav-mob a {
-      display: block; padding: 11px 14px;
-      color: var(--muted); text-decoration: none;
-      font-size: .9rem; font-weight: 500;
-      border-radius: 8px; transition: all .2s;
-    }
-    .nav-mob a:hover { color: var(--text); background: var(--bg-card2); }
-    @media(max-width:768px){
-      .nav-links { display: none; }
-      .hamburger { display: flex; }
-    }
+/* ── DARK THEME (default) ── */
+:root{
+  --bg:#0d0d14;
+  --s1:#161622;
+  --s2:#1c1c2a;
+  --s3:#252537;
+  --border:#2a2a3e;
+  --border2:#333349;
+  --acc:#7c6dfa;
+  --acc-l:#9d8fff;
+  --acc-d:rgba(124,109,250,.13);
+  --text:#e2e2ee;
+  --muted:#7070a0;
+  --dim:#4a4a6a;
+  --ok:#34d399;
+  --ok-d:rgba(52,211,153,.13);
+  --warn:#fbbf24;
+  --warn-d:rgba(251,191,36,.13);
+  --err:#f87171;
+  --err-d:rgba(248,113,113,.13);
+  --HH:52px;
+  --shadow:rgba(0,0,0,.5);
+  --slot-line:rgba(255,255,255,.04);
+  --slot-half:rgba(255,255,255,.03);
+  --task-bg:rgba(124,109,250,.14);
+  --task-border:rgba(124,109,250,.28);
+  --task-done-bg:rgba(52,211,153,.1);
+  --task-done-border:rgba(52,211,153,.25);
+  --task-wip-bg:rgba(251,191,36,.1);
+  --task-wip-border:rgba(251,191,36,.25);
+  --handle-bar:rgba(255,255,255,.28);
+  --today-col:rgba(124,109,250,.025);
+  --picker-filter:invert(.5);
+}
 
-    /* ─── LAYOUT ─── */
-    main { padding-top: 62px; }
-    .section {
-      padding: 88px clamp(16px,4vw,52px);
-      max-width: 1300px; margin: 0 auto;
-      position: relative; z-index: 1;
-    }
-    .sec-lbl {
-      font-size: .7rem; text-transform: uppercase;
-      letter-spacing: .14em; color: var(--acc);
-      font-weight: 600; margin-bottom: 8px;
-    }
-    .sec-title {
-      font-size: clamp(1.9rem,4.5vw,2.8rem);
-      font-weight: 700; margin-bottom: 12px;
-    }
-    .sec-desc { color: var(--muted); max-width: 520px; font-size: .93rem; }
-    .sec-head { margin-bottom: 46px; }
+/* ── LIGHT THEME ── */
+[data-theme="light"]{
+  --bg:#f2f2f8;
+  --s1:#ffffff;
+  --s2:#f8f8fd;
+  --s3:#ededf7;
+  --border:#dcdcee;
+  --border2:#cacacc;
+  --acc:#6c5ce7;
+  --acc-l:#7c6cf5;
+  --acc-d:rgba(108,92,231,.1);
+  --text:#1a1a30;
+  --muted:#6666a0;
+  --dim:#9999c0;
+  --ok:#00a878;
+  --ok-d:rgba(0,168,120,.1);
+  --warn:#b87800;
+  --warn-d:rgba(184,120,0,.1);
+  --err:#d63031;
+  --err-d:rgba(214,48,49,.1);
+  --shadow:rgba(0,0,0,.15);
+  --slot-line:rgba(0,0,0,.07);
+  --slot-half:rgba(0,0,0,.04);
+  --task-bg:rgba(108,92,231,.09);
+  --task-border:rgba(108,92,231,.24);
+  --task-done-bg:rgba(0,168,120,.09);
+  --task-done-border:rgba(0,168,120,.24);
+  --task-wip-bg:rgba(184,120,0,.09);
+  --task-wip-border:rgba(184,120,0,.24);
+  --handle-bar:rgba(0,0,0,.2);
+  --today-col:rgba(108,92,231,.03);
+  --picker-filter:opacity(.45);
+}
 
-    /* ─── HERO ─── */
-    #hero {
-      min-height: calc(100vh - 62px);
-      display: flex; align-items: center; justify-content: center;
-      text-align: center;
-      padding: 60px clamp(16px,5vw,52px);
-      position: relative; overflow: hidden; z-index: 1;
-    }
-    .hero-glow-1 {
-      position: absolute; top: 20%; left: 50%;
-      transform: translate(-50%,-50%);
-      width: 1000px; height: 700px;
-      background: radial-gradient(ellipse, rgba(124,92,191,.1) 0%, transparent 68%);
-      pointer-events: none;
-    }
-    .hero-glow-2 {
-      position: absolute; bottom: 5%; right: 5%;
-      width: 500px; height: 500px;
-      background: radial-gradient(circle, rgba(78,142,240,.07) 0%, transparent 68%);
-      pointer-events: none;
-    }
-    .hero-content { position: relative; z-index: 1; }
-    .hero-badge {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: var(--bg-card); border: 1px solid var(--border);
-      padding: 6px 18px; border-radius: 100px;
-      font-size: .72rem; color: var(--muted);
-      margin-bottom: 30px;
-      text-transform: uppercase; letter-spacing: .09em;
-    }
-    .badge-dot {
-      width: 7px; height: 7px; background: var(--green);
-      border-radius: 50%; animation: blink 2.2s infinite;
-    }
-    @keyframes blink {
-      0%,100%{opacity:1;box-shadow:0 0 7px var(--green)}
-      50%{opacity:.35;box-shadow:none}
-    }
-    .hero h1 {
-      font-size: clamp(3.2rem,10vw,7rem);
-      font-weight: 700; line-height: 1.04;
-      margin-bottom: 22px;
-    }
-    .hero h1 .grad {
-      background: linear-gradient(140deg, var(--acc) 0%, var(--blue) 55%, var(--amber) 100%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    .hero-sub {
-      font-size: 1.05rem; color: var(--muted);
-      max-width: 450px; margin: 0 auto 52px;
-    }
-    .hero-stats {
-      display: flex; gap: 40px;
-      justify-content: center; flex-wrap: wrap;
-    }
-    .hs { text-align: center; }
-    .hs-val {
-      font-family: 'Oswald', sans-serif;
-      font-size: 2.4rem; font-weight: 700; line-height: 1;
-      background: linear-gradient(135deg, var(--acc), var(--blue));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      background-clip: text; display: block; margin-bottom: 4px;
-    }
-    .hs-lbl {
-      font-size: .7rem; color: var(--muted);
-      text-transform: uppercase; letter-spacing: .08em;
-    }
-    .hs-div { width: 1px; height: 40px; background: var(--border); align-self: center; }
-    @media(max-width:480px){ .hs-div{display:none} .hero-stats{gap:22px} }
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;font-size:15px;line-height:1.5;overflow:hidden}
 
-    /* ─── КБЖУ ─── */
-    .kbzu-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(198px,1fr));
-      gap: 16px; margin-bottom: 22px;
-    }
-    .kbzu-card {
-      background: var(--bg-card); border: 1px solid var(--border);
-      border-radius: var(--r); padding: 24px 22px;
-      position: relative; overflow: hidden;
-      transition: transform .3s, border-color .3s, box-shadow .3s;
-      cursor: default;
-    }
-    .kbzu-card:hover { transform: translateY(-4px); }
-    .kbzu-card::before {
-      content: ''; position: absolute;
-      top: 0; left: 0; right: 0; height: 3px;
-    }
-    .kbzu-card.kal::before   { background: linear-gradient(90deg,var(--amber),var(--red)); }
-    .kbzu-card.prot::before  { background: linear-gradient(90deg,var(--blue),var(--acc)); }
-    .kbzu-card.fat::before   { background: linear-gradient(90deg,var(--amber),#f5e060); }
-    .kbzu-card.carb::before  { background: linear-gradient(90deg,var(--green),var(--blue)); }
-    .kbzu-card.kal:hover  { border-color:var(--amber); box-shadow:0 8px 32px rgba(232,168,56,.14); }
-    .kbzu-card.prot:hover { border-color:var(--blue);  box-shadow:0 8px 32px rgba(78,142,240,.14); }
-    .kbzu-card.fat:hover  { border-color:#f5e060;      box-shadow:0 8px 32px rgba(245,224,96,.12); }
-    .kbzu-card.carb:hover { border-color:var(--green); box-shadow:0 8px 32px rgba(62,207,142,.12); }
-    .kbzu-icon { font-size: 1.6rem; margin-bottom: 12px; line-height: 1; }
-    .kbzu-lbl {
-      font-size: .7rem; text-transform: uppercase;
-      letter-spacing: .1em; color: var(--muted); margin-bottom: 8px;
-    }
-    .kbzu-val {
-      font-family: 'Oswald', sans-serif;
-      font-size: 2.8rem; font-weight: 700; line-height: 1;
-    }
-    .kbzu-card.kal  .kbzu-val { color: var(--amber); }
-    .kbzu-card.prot .kbzu-val { color: var(--blue); }
-    .kbzu-card.fat  .kbzu-val { color: #f5e060; }
-    .kbzu-card.carb .kbzu-val { color: var(--green); }
-    .kbzu-unit { font-size: .9rem; color: var(--muted); font-weight: 400; }
-    .kbzu-bar {
-      margin-top: 16px; height: 3px;
-      background: var(--border); border-radius: 2px; overflow: hidden;
-    }
-    .kbzu-fill {
-      height: 100%; border-radius: 2px;
-      transform-origin: left;
-      animation: growFill 1.4s .4s cubic-bezier(.4,0,.2,1) both;
-    }
-    @keyframes growFill { from{transform:scaleX(0)} to{transform:scaleX(1)} }
-    .kbzu-card.kal  .kbzu-fill { background:linear-gradient(90deg,var(--amber),var(--red));  width:100%; }
-    .kbzu-card.prot .kbzu-fill { background:linear-gradient(90deg,var(--blue),var(--acc));   width:87%; }
-    .kbzu-card.fat  .kbzu-fill { background:linear-gradient(90deg,var(--amber),#f5e060);     width:35%; }
-    .kbzu-card.carb .kbzu-fill { background:linear-gradient(90deg,var(--green),var(--blue)); width:84%; }
-    .kbzu-note {
-      display: flex; gap: 10px;
-      background: var(--acc-l); border: 1px solid rgba(124,92,191,.25);
-      border-radius: var(--rs); padding: 14px 16px;
-      font-size: .82rem; color: var(--muted);
-    }
-    .kbzu-note strong { color: var(--acc); }
+/* ── AUTH SCREEN ── */
+.auth-screen{
+  position:fixed;inset:0;background:var(--bg);
+  display:flex;align-items:center;justify-content:center;
+  z-index:1000;padding:20px;
+}
+.auth-card{
+  width:100%;max-width:390px;
+  background:var(--s1);border:1px solid var(--border);
+  border-radius:22px;padding:38px 36px;
+  box-shadow:0 32px 80px rgba(0,0,0,.4);
+}
+.auth-logo{display:flex;align-items:center;gap:12px;justify-content:center;margin-bottom:32px}
+.auth-tabs{display:flex;gap:2px;background:var(--s3);border-radius:11px;padding:3px;margin-bottom:26px}
+.auth-tab{flex:1;padding:8px 16px;border-radius:9px;border:none;cursor:pointer;font-family:inherit;font-size:13px;font-weight:600;color:var(--muted);background:transparent;transition:.15s}
+.auth-tab.active{background:var(--s1);color:var(--text);box-shadow:0 1px 4px var(--shadow)}
+.auth-error{padding:10px 14px;border-radius:9px;margin-bottom:14px;background:var(--err-d);border:1px solid rgba(248,113,113,.3);color:var(--err);font-size:13px}
 
-    /* ─── WEEK BAR ─── */
-    .week-bar {
-      display: grid; grid-template-columns: repeat(7,1fr);
-      gap: 8px; margin-bottom: 40px;
-    }
-    @media(max-width:600px){ .week-bar { grid-template-columns:repeat(4,1fr); gap:6px; } }
-    .wc {
-      background: var(--bg-card); border: 1px solid var(--border);
-      border-radius: var(--rs); padding: 11px 6px;
-      text-align: center; cursor: pointer;
-      transition: all .22s; user-select: none;
-      position: relative;
-    }
-    .wc.train  { border-color:rgba(124,92,191,.4); background:rgba(124,92,191,.06); }
-    .wc.cardio { border-color:rgba(78,142,240,.4);  background:rgba(78,142,240,.05); }
-    .wc.rest   { opacity: .4; pointer-events: none; cursor: default; }
-    .wc.done   { border-color:rgba(62,207,142,.5)!important; background:rgba(62,207,142,.07)!important; }
-    .wc .wc-name {
-      font-family: 'Oswald', sans-serif;
-      font-size: .82rem; font-weight: 600;
-      text-transform: uppercase; letter-spacing: .06em;
-      margin-bottom: 3px;
-    }
-    .wc .wc-type { font-size: .62rem; text-transform: uppercase; letter-spacing: .04em; }
-    .wc.train  .wc-type  { color: var(--acc); }
-    .wc.cardio .wc-type  { color: var(--blue); }
-    .wc.rest   .wc-type  { color: var(--dim); }
-    .wc.done   .wc-type  { color: var(--green); }
-    .wc-check {
-      position: absolute; top: 5px; right: 6px;
-      font-size: .58rem; color: var(--green);
-      opacity: 0; transition: opacity .2s;
-    }
-    .wc.done .wc-check { opacity: 1; }
+/* ── APP SHELL ── */
+.app{display:flex;flex-direction:column;height:100vh;overflow:hidden}
 
-    /* ─── TABS ─── */
-    .tabs-row {
-      background: var(--bg-card); border: 1px solid var(--border);
-      border-radius: var(--r); padding: 5px;
-      display: flex; gap: 5px; margin-bottom: 34px;
-      flex-wrap: wrap;
-    }
-    .tab-btn {
-      flex: 1; min-width: 130px;
-      padding: 13px 16px; border: none; background: transparent;
-      color: var(--muted);
-      font-family: 'Oswald', sans-serif;
-      font-size: .92rem; font-weight: 500; letter-spacing: .04em;
-      cursor: pointer;
-      border-radius: calc(var(--r) - 3px);
-      transition: all .24s; text-align: center;
-    }
-    .tab-btn:hover { color: var(--text); background: var(--bg-card2); }
-    .tab-btn.active {
-      background: linear-gradient(135deg, var(--acc), var(--blue));
-      color: #fff;
-      box-shadow: 0 4px 20px var(--acc-glow);
-    }
-    .tab-sub {
-      display: block; font-size: .62rem; opacity: .65;
-      margin-bottom: 1px; text-transform: uppercase; letter-spacing: .1em;
-    }
-    .tab-pane { display: none; animation: fadeUp .32s ease; }
-    .tab-pane.active { display: block; }
-    @keyframes fadeUp {
-      from{opacity:0;transform:translateY(10px)}
-      to{opacity:1;transform:translateY(0)}
-    }
+/* ── HEADER ── */
+.hdr{display:flex;align-items:center;gap:10px;padding:11px 20px;background:var(--s1);border-bottom:1px solid var(--border);flex-shrink:0;z-index:20}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-icon{width:36px;height:36px;background:linear-gradient(135deg,#7c6dfa,#a855f7);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:15px;color:#fff;font-weight:700;letter-spacing:-1px;flex-shrink:0}
+.logo-name{font-size:18px;font-weight:700;color:var(--text);letter-spacing:-.4px}
+.hdr-today{font-size:13px;color:var(--muted);margin-left:4px}
+.hdr-space{flex:1}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:9px;border:none;cursor:pointer;font-family:inherit;font-size:13px;font-weight:500;transition:.15s all;white-space:nowrap}
+.btn-primary{background:var(--acc);color:#fff}
+.btn-primary:hover{background:var(--acc-l);box-shadow:0 4px 14px rgba(124,109,250,.35);transform:translateY(-1px)}
+.btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}
+.btn-ghost:hover{background:var(--s3);color:var(--text)}
+.btn-sm{padding:6px 12px;font-size:13px}
+.btn-danger{background:var(--err-d);color:var(--err);border:1px solid rgba(248,113,113,.3)}
+.btn-danger:hover{background:var(--err);color:#fff;box-shadow:0 4px 12px rgba(248,113,113,.3)}
+.theme-btn{width:34px;height:34px;padding:0;border-radius:8px;border:1px solid var(--border);background:var(--s3);color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;transition:.15s;flex-shrink:0}
+.theme-btn:hover{background:var(--border);transform:rotate(20deg)}
+.user-chip{display:flex;align-items:center;gap:8px;padding:5px 10px 5px 5px;border-radius:20px;background:var(--s3);border:1px solid var(--border);flex-shrink:0}
+.uc-avatar{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--acc),#a855f7);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;text-transform:uppercase;flex-shrink:0}
+.uc-name{font-size:13px;font-weight:600;color:var(--text)}
 
-    /* ─── EXERCISE GRID ─── */
-    .ex-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(340px,1fr));
-      gap: 16px;
-    }
-    @media(max-width:740px){ .ex-grid { grid-template-columns: 1fr; } }
+/* ── TABS ── */
+.tabs{display:flex;gap:2px;background:var(--s3);border-radius:10px;padding:3px}
+.tab{padding:6px 16px;border-radius:8px;border:none;cursor:pointer;font-family:inherit;font-size:13px;font-weight:600;color:var(--muted);background:transparent;transition:.15s;letter-spacing:.1px}
+.tab.active{background:var(--s1);color:var(--text);box-shadow:0 1px 4px var(--shadow)}
 
-    /* ─── EXERCISE CARD ─── */
-    .ex-card {
-      background: var(--bg-card); border: 1px solid var(--border);
-      border-radius: var(--r); overflow: hidden;
-      transition: border-color .28s, box-shadow .28s, transform .28s;
-    }
-    .ex-card:hover {
-      border-color: rgba(124,92,191,.42);
-      box-shadow: 0 8px 40px rgba(0,0,0,.32);
-      transform: translateY(-2px);
-    }
-    .ex-head {
-      padding: 16px 17px 13px;
-      display: flex; gap: 13px; align-items: flex-start;
-      border-bottom: 1px solid var(--border);
-    }
-    .ex-num {
-      width: 33px; height: 33px;
-      background: linear-gradient(135deg, var(--acc), var(--blue));
-      border-radius: 9px;
-      display: flex; align-items: center; justify-content: center;
-      font-family: 'Oswald', sans-serif;
-      font-size: .92rem; font-weight: 700; color: #fff; flex-shrink: 0;
-    }
-    .ex-title-wrap { flex: 1; }
-    .ex-name {
-      font-size: .98rem; font-weight: 600;
-      margin-bottom: 7px; line-height: 1.3;
-    }
-    .mtag {
-      display: inline-flex; align-items: center; gap: 4px;
-      font-size: .65rem; font-weight: 700;
-      text-transform: uppercase; letter-spacing: .06em;
-      padding: 3px 10px; border-radius: 100px;
-    }
-    .mt-sho { background:var(--acc-l); border:1px solid rgba(124,92,191,.3); color:var(--acc); }
-    .mt-tri { background:var(--amber-l); border:1px solid rgba(232,168,56,.3); color:var(--amber); }
-    .mt-cor { background:var(--red-l); border:1px solid rgba(240,92,92,.3); color:var(--red); }
-    .mt-bac { background:var(--blue-l); border:1px solid rgba(78,142,240,.3); color:var(--blue); }
-    .mt-bic { background:var(--green-l); border:1px solid rgba(62,207,142,.3); color:var(--green); }
-    .mt-low { background:rgba(212,107,240,.1); border:1px solid rgba(212,107,240,.28); color:var(--pink); }
+/* ── DAY HEADERS ── */
+.cal-head{display:flex;background:var(--s1);border-bottom:1px solid var(--border);flex-shrink:0}
+.time-gutter{width:58px;flex-shrink:0;border-right:1px solid var(--border)}
+.day-headers{flex:1;display:flex}
+.day-col-hdr{flex:1;min-width:110px;padding:10px 8px;text-align:center;border-right:1px solid var(--border);cursor:pointer;transition:.15s background}
+.day-col-hdr:last-child{border-right:none}
+.day-col-hdr.today{background:var(--acc-d)}
+.day-col-hdr:hover{background:var(--s2)}
+.dh-name{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.7px}
+.day-col-hdr.today .dh-name{color:var(--acc-l)}
+.dh-num{font-size:24px;font-weight:700;color:var(--text);line-height:1.1;margin-top:1px}
+.day-col-hdr.today .dh-num{color:var(--acc)}
+.dh-month{font-size:11px;color:var(--dim);margin-top:1px}
+.day-col-hdr.today .dh-month{color:var(--acc);opacity:.8}
 
-    /* sets row */
-    .ex-stats {
-      padding: 13px 15px; display: flex;
-      gap: 7px; flex-wrap: wrap;
-    }
-    .ex-foot {
-      padding: 0 15px 12px;
-      display: flex; gap: 8px; align-items: center;
-      border-bottom: 1px solid var(--border);
-      flex-wrap: wrap;
-    }
-    .sp {
-      flex: 1; min-width: 60px; background: var(--bg-card2);
-      border-radius: 8px; padding: 8px 5px; text-align: center;
-    }
-    .sp .sv {
-      font-family: 'Oswald', sans-serif;
-      font-size: 1.18rem; font-weight: 600; color: var(--text); line-height: 1;
-    }
-    .sp .sl {
-      font-size: .62rem; text-transform: uppercase;
-      letter-spacing: .06em; color: var(--muted); margin-top: 3px;
-    }
-    .rest-pill {
-      display: flex; align-items: center; gap: 5px;
-      background: var(--bg-card2); border-radius: 8px;
-      padding: 8px 11px; font-size: .73rem; color: var(--muted); white-space: nowrap;
-    }
-    .timer-btn {
-      display: flex; align-items: center; gap: 6px;
-      background: var(--bg-card2); border: 1px solid var(--border);
-      border-radius: 8px; padding: 8px 13px;
-      font-family: 'Oswald', sans-serif;
-      font-size: .83rem; color: var(--muted);
-      cursor: pointer; transition: all .24s; white-space: nowrap;
-    }
-    .timer-btn:hover { border-color:var(--acc); color:var(--acc); }
-    .timer-btn.running { border-color:var(--green); color:var(--green); background:var(--green-l); }
-    .timer-btn.expired { border-color:var(--acc); color:var(--acc); background:var(--acc-l); animation:pingPulse .5s ease; }
-    @keyframes pingPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.04)} }
+/* ── ALL-DAY ROW ── */
+.allday-wrap{display:flex;background:var(--s1);border-bottom:2px solid var(--border2);flex-shrink:0;min-height:38px}
+.allday-gutter{width:58px;flex-shrink:0;border-right:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:.4px;padding:2px}
+.allday-cells{flex:1;display:flex}
+.allday-cell{flex:1;min-width:110px;border-right:1px solid var(--border);padding:4px 4px;display:flex;flex-wrap:wrap;gap:3px;align-content:flex-start}
+.allday-cell:last-child{border-right:none}
+.allday-chip{display:inline-flex;align-items:center;padding:2px 8px;border-radius:6px;font-size:12px;font-weight:500;background:var(--acc-d);border:1px solid var(--task-border);color:var(--acc-l);cursor:pointer;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;transition:.15s}
+.allday-chip:hover{filter:brightness(1.1)}
+.allday-chip.s-done{background:var(--task-done-bg);border-color:var(--task-done-border);color:var(--ok);text-decoration:line-through;opacity:.7}
+.allday-chip.s-in-progress{background:var(--task-wip-bg);border-color:var(--task-wip-border);color:var(--warn)}
 
-    /* accordions */
-    .ex-acc { padding: 9px 12px; display: flex; flex-direction: column; gap: 6px; }
-    .ac {
-      border: 1px solid var(--border); border-radius: var(--rs); overflow: hidden;
-    }
-    .ac-btn {
-      width: 100%; padding: 10px 13px;
-      background: var(--bg-card2); border: none; color: var(--text);
-      display: flex; align-items: center; gap: 8px;
-      font-family: 'Inter', sans-serif;
-      font-size: .78rem; font-weight: 600;
-      cursor: pointer; text-align: left; transition: background .2s;
-    }
-    .ac-btn:hover { background: rgba(124,92,191,.12); }
-    .ac-ic { font-size: .92rem; }
-    .ac-arr {
-      margin-left: auto; color: var(--dim); font-size: .68rem;
-      transition: transform .28s;
-    }
-    .ac-btn.open .ac-arr { transform: rotate(180deg); }
-    .ac-body {
-      display: none; padding: 11px 13px;
-      background: var(--bg-card);
-      border-top: 1px solid var(--border);
-    }
-    .ac-body.open { display: block; animation: fadeUp .22s ease; }
-    .tech-list {
-      list-style: none; display: flex;
-      flex-direction: column; gap: 7px;
-    }
-    .tech-list li {
-      display: flex; gap: 9px;
-      font-size: .78rem; color: var(--muted); line-height: 1.55;
-    }
-    .t-n {
-      width: 17px; height: 17px; flex-shrink: 0;
-      background: linear-gradient(135deg, var(--acc), var(--blue));
-      border-radius: 5px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: .58rem; font-weight: 700; color: #fff; margin-top: 1px;
-    }
-    .err-list {
-      list-style: none; display: flex; flex-direction: column; gap: 6px;
-    }
-    .err-list li {
-      display: flex; gap: 8px;
-      font-size: .78rem; color: var(--muted); line-height: 1.55;
-    }
-    .err-i {
-      width: 15px; height: 15px; flex-shrink: 0;
-      background: var(--red-l); border: 1px solid rgba(240,92,92,.3);
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: .56rem; font-weight: 900; color: var(--red); margin-top: 2px;
-    }
+/* ── CALENDAR SCROLL ── */
+.cal-scroll{flex:1;overflow:auto;position:relative}
+.cal-inner{display:flex;position:relative}
+.time-labels{width:58px;flex-shrink:0;border-right:1px solid var(--border);background:var(--s1)}
+.time-lbl{height:var(--HH);display:flex;align-items:flex-start;justify-content:flex-end;padding:4px 8px 0 0;font-size:10px;color:var(--dim);font-weight:600;user-select:none}
+.day-cols{flex:1;display:flex;position:relative}
+.day-col{flex:1;min-width:110px;border-right:1px solid var(--border);position:relative}
+.day-col:last-child{border-right:none}
+.day-col.today{background:var(--today-col)}
+.hour-slot{height:var(--HH);border-bottom:1px solid var(--slot-line);position:relative;cursor:crosshair}
+.hour-slot::after{content:'';position:absolute;left:0;right:0;top:50%;border-bottom:1px dashed var(--slot-half);pointer-events:none}
+.hour-slot:hover{background:var(--acc-d)}
+.now-line{position:absolute;left:0;right:0;height:2px;background:var(--acc);z-index:3;pointer-events:none}
+.now-line::before{content:'';position:absolute;left:-4px;top:-4px;width:10px;height:10px;border-radius:50%;background:var(--acc)}
 
-    /* ─── CARDIO ─── */
-    .cardio-summary {
-      display: grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr));
-      gap: 14px; margin-bottom: 38px;
-    }
-    .c-sum-card {
-      background: var(--bg-card); border: 1px solid var(--border);
-      border-radius: var(--r); padding: 18px 20px;
-    }
-    .c-sum-card .cs-val {
-      font-family: 'Oswald', sans-serif;
-      font-size: 2rem; font-weight: 700; color: var(--blue);
-    }
-    .c-sum-card .cs-lbl {
-      font-size: .7rem; text-transform: uppercase;
-      letter-spacing: .08em; color: var(--muted);
-    }
-    .timeline {
-      display: flex; flex-direction: column;
-    }
-    .tl-item {
-      display: flex; gap: 18px;
-    }
-    .tl-connector {
-      display: flex; flex-direction: column; align-items: center;
-      flex-shrink: 0; width: 18px;
-    }
-    .tl-dot {
-      width: 13px; height: 13px; border-radius: 50%; flex-shrink: 0;
-      margin-top: 18px; box-shadow: 0 0 0 3px var(--bg);
-    }
-    .tl-seg { flex: 1; width: 2px; background: var(--border); margin: 3px 0; min-height: 16px; }
-    .tl-item:last-child .tl-seg { display: none; }
-    .tl-card {
-      flex: 1; margin-bottom: 14px;
-      background: var(--bg-card); border: 1px solid var(--border);
-      border-radius: var(--r); padding: 18px 20px;
-      transition: border-color .24s;
-    }
-    .tl-card:hover { border-color: rgba(78,142,240,.35); }
-    .tl-phase {
-      font-family: 'Oswald', sans-serif;
-      font-size: .66rem; font-weight: 600;
-      text-transform: uppercase; letter-spacing: .1em;
-      margin-bottom: 3px;
-    }
-    .tl-title {
-      font-family: 'Oswald', sans-serif;
-      font-size: 1.05rem; font-weight: 600; margin-bottom: 10px;
-    }
-    .tl-chips { display: flex; gap: 8px; flex-wrap: wrap; }
-    .chip {
-      background: var(--bg-card2); border-radius: 7px;
-      padding: 6px 12px; font-size: .73rem; color: var(--muted);
-    }
-    .chip strong {
-      color: var(--text); display: block;
-      font-family: 'Oswald', sans-serif; font-size: .9rem;
-    }
-    .hiit-grid { margin-top: 14px; display: flex; gap: 5px; flex-wrap: wrap; }
-    .hb {
-      padding: 5px 10px; border-radius: 6px;
-      font-size: .7rem; font-weight: 700; letter-spacing: .04em;
-    }
-    .hb.on  { background:var(--red-l); border:1px solid rgba(240,92,92,.3); color:var(--red); }
-    .hb.off { background:var(--green-l); border:1px solid rgba(62,207,142,.3); color:var(--green); }
+/* ── TASK BLOCKS ── */
+.task-block{
+  position:absolute;left:2px;right:2px;
+  border-radius:7px;padding:5px 8px;
+  background:var(--task-bg);border:1px solid var(--task-border);border-left:3px solid var(--acc);
+  cursor:grab;user-select:none;overflow:hidden;transition:.12s box-shadow;z-index:2;min-height:22px;
+}
+.task-block:hover{box-shadow:0 4px 16px rgba(124,109,250,.2);z-index:3}
+.task-block.s-done{background:var(--task-done-bg);border-color:var(--task-done-border);border-left-color:var(--ok)}
+.task-block.s-in-progress{background:var(--task-wip-bg);border-color:var(--task-wip-border);border-left-color:var(--warn)}
+.task-block.is-dragging{opacity:.35;cursor:grabbing;z-index:1}
+.task-block.drag-ghost{
+  position:fixed;pointer-events:none;z-index:1000;opacity:.88;
+  left:auto!important;right:auto!important;width:160px;
+  box-shadow:0 10px 28px var(--shadow);transform:rotate(1.5deg);
+}
+.tb-title{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text)}
+.tb-time{font-size:10px;color:var(--muted);margin-top:1px}
+.tb-badge{font-size:10px;font-style:italic;margin-top:1px}
+.tb-badge.s-in-progress{color:var(--warn)}
+.tb-badge.s-done{color:var(--ok)}
+.resize-handle{position:absolute;bottom:0;left:0;right:0;height:8px;cursor:ns-resize;display:flex;align-items:center;justify-content:center;opacity:0;transition:.15s}
+.task-block:hover .resize-handle{opacity:1}
+.resize-handle::after{content:'';width:22px;height:3px;border-radius:2px;background:var(--handle-bar)}
+.drop-ind{position:absolute;left:2px;right:2px;border-radius:7px;border:2px dashed var(--acc);background:var(--acc-d);pointer-events:none;z-index:4;display:none}
 
-    /* ─── PROGRESS ─── */
-    #progress {
-      background: var(--bg-card);
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      position: relative; z-index: 1;
-    }
-    .prog-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(285px,1fr));
-      gap: 14px;
-    }
-    .prog-card {
-      background: var(--bg); border: 1px solid var(--border);
-      border-radius: var(--r); padding: 16px;
-      transition: border-color .22s;
-    }
-    .prog-card:hover { border-color: rgba(124,92,191,.35); }
-    .prog-hd {
-      display: flex; align-items: center;
-      justify-content: space-between; margin-bottom: 12px;
-    }
-    .prog-name {
-      font-family: 'Oswald', sans-serif;
-      font-size: .9rem; font-weight: 600;
-    }
-    .prog-trend { font-size: .72rem; font-weight: 700; }
-    .prog-trend.up   { color: var(--green); }
-    .prog-trend.down { color: var(--red); }
-    .prog-trend.flat { color: var(--dim); }
-    .prog-inputs { display: flex; gap: 7px; margin-bottom: 9px; }
-    .pf { flex: 1; }
-    .pf label {
-      display: block; font-size: .62rem;
-      text-transform: uppercase; letter-spacing: .08em;
-      color: var(--muted); margin-bottom: 3px;
-    }
-    .pf input {
-      width: 100%; background: var(--bg-card);
-      border: 1px solid var(--border); color: var(--text);
-      padding: 7px 9px; border-radius: 7px;
-      font-size: .86rem; font-family: 'Oswald', sans-serif;
-      outline: none; transition: border-color .2s, box-shadow .2s;
-    }
-    .pf input:focus { border-color:var(--acc); box-shadow:0 0 0 3px var(--acc-glow); }
-    .prog-save {
-      width: 100%; padding: 8px;
-      background: linear-gradient(135deg, var(--acc), var(--blue));
-      border: none; border-radius: 8px; color: #fff;
-      font-family: 'Oswald', sans-serif;
-      font-size: .82rem; font-weight: 600; letter-spacing: .04em;
-      cursor: pointer; transition: opacity .2s, transform .2s;
-    }
-    .prog-save:hover { opacity: .86; transform: translateY(-1px); }
-    .prog-hist {
-      margin-top: 9px; max-height: 108px; overflow-y: auto;
-      display: flex; flex-direction: column; gap: 3px;
-    }
-    .pe {
-      display: flex; align-items: center; gap: 4px;
-      font-size: .72rem; color: var(--muted);
-      padding: 4px 8px; background: var(--bg-card); border-radius: 6px;
-    }
-    .pe .pe-date { color: var(--dim); }
-    .pe .pe-val  { color: var(--text); font-weight: 600; font-family: 'Oswald', sans-serif; flex: 1; text-align: right; }
-    .pe-del {
-      background: none; border: none; color: var(--dim);
-      cursor: pointer; font-size: .6rem; padding: 2px 5px;
-      border-radius: 4px; transition: all .2s; flex-shrink: 0;
-      line-height: 1;
-    }
-    .pe-del:hover { color: var(--red); background: var(--red-l); }
-    .prog-empty {
-      font-size: .73rem; color: var(--dim);
-      text-align: center; padding: 8px;
-      font-style: italic;
-    }
+/* ── FUTURE PANEL ── */
+.future-panel{border-top:1px solid var(--border);background:var(--s1);flex-shrink:0;max-height:200px;overflow:hidden;transition:.25s max-height}
+.future-panel.collapsed{max-height:42px}
+.fp-header{display:flex;align-items:center;gap:8px;padding:11px 22px;cursor:pointer;user-select:none;transition:.15s background}
+.fp-header:hover{background:var(--s2)}
+.fp-title{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.fp-count{font-size:11px;padding:1px 7px;border-radius:10px;background:var(--acc-d);color:var(--acc-l);font-weight:700}
+.fp-arrow{margin-left:auto;color:var(--dim);font-size:11px;transition:.2s transform}
+.future-panel.collapsed .fp-arrow{transform:rotate(-90deg)}
+.fp-body{overflow-y:auto;max-height:156px;padding:0 22px 12px}
+.fp-item{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);cursor:pointer}
+.fp-item:last-child{border-bottom:none}
+.fp-item:hover .fp-name{color:var(--acc-l)}
+.fp-date{font-size:12px;color:var(--muted);font-weight:600;min-width:80px}
+.fp-name{flex:1;font-size:13px;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;transition:.1s}
+.fp-time{font-size:11px;color:var(--dim)}
+.fp-status{font-size:10px;padding:2px 7px;border-radius:10px;font-weight:600}
+.fp-status.s-pending{background:rgba(112,112,160,.15);color:var(--muted)}
+.fp-status.s-in-progress{background:var(--task-wip-bg);color:var(--warn)}
+.fp-status.s-done{background:var(--task-done-bg);color:var(--ok)}
 
-    /* ─── WORKOUT LOG ─── */
-    .log-top {
-      display: flex; align-items: center;
-      justify-content: space-between; flex-wrap: wrap;
-      gap: 12px; margin-bottom: 26px;
-    }
-    .log-add-btn {
-      display: flex; align-items: center; gap: 8px;
-      background: linear-gradient(135deg, var(--acc), var(--blue));
-      border: none; color: #fff;
-      padding: 11px 22px; border-radius: var(--r);
-      font-family: 'Oswald', sans-serif;
-      font-size: .88rem; font-weight: 600; letter-spacing: .05em;
-      cursor: pointer; transition: all .24s;
-    }
-    .log-add-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px var(--acc-glow); }
-    .log-list { display: flex; flex-direction: column; gap: 9px; }
-    .log-item {
-      background: var(--bg-card); border: 1px solid var(--border);
-      border-radius: var(--r); padding: 13px 17px;
-      display: flex; align-items: center; gap: 14px;
-      transition: border-color .2s;
-    }
-    .log-item:hover { border-color: rgba(124,92,191,.3); }
-    .log-date-box {
-      background: var(--bg-card2); border-radius: 9px;
-      padding: 7px 13px; text-align: center; flex-shrink: 0;
-    }
-    .log-date-box .ldd {
-      font-family: 'Oswald', sans-serif;
-      font-size: 1.5rem; font-weight: 700; line-height: 1;
-    }
-    .log-date-box .ldm {
-      font-size: .6rem; text-transform: uppercase;
-      color: var(--muted); letter-spacing: .06em;
-    }
-    .log-info { flex: 1; }
-    .log-type {
-      font-family: 'Oswald', sans-serif;
-      font-size: .92rem; font-weight: 600; margin-bottom: 2px;
-    }
-    .log-note { font-size: .76rem; color: var(--muted); }
-    .log-del {
-      background: none; border: none; color: var(--dim);
-      cursor: pointer; font-size: 1rem; padding: 6px;
-      border-radius: 6px; transition: all .2s;
-    }
-    .log-del:hover { color: var(--red); background: var(--red-l); }
-    .log-empty {
-      text-align: center; color: var(--dim); padding: 44px 20px;
-      font-size: .88rem; border: 1px dashed var(--border); border-radius: var(--r);
-    }
-    .log-empty .log-e-ico { font-size: 2rem; display: block; margin-bottom: 8px; opacity: .4; }
+/* ── ALL TASKS VIEW ── */
+.all-view{flex:1;overflow-y:auto;padding:24px 20px;display:none;flex-direction:column;align-items:center}
+.all-view.active{display:flex}
+.all-section{width:100%;max-width:660px;margin-bottom:10px}
+.all-section-hdr{font-size:11px;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:.6px;padding:10px 0 7px;border-bottom:1px solid var(--border);margin-bottom:6px}
+.all-section-hdr.no-date-hdr{color:var(--muted)}
+.all-card{display:flex;align-items:center;gap:14px;padding:12px 16px;margin-bottom:5px;border-radius:10px;background:var(--s2);border:1px solid var(--border);border-left:3px solid var(--acc);cursor:pointer;transition:.12s}
+.all-card:hover{background:var(--s3);transform:translateX(2px)}
+.all-card.s-done{border-left-color:var(--ok)}
+.all-card.s-in-progress{border-left-color:var(--warn)}
+.ac-body{flex:1;min-width:0}
+.ac-title{font-size:14px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.all-card.s-done .ac-title{text-decoration:line-through;opacity:.5}
+.ac-meta{font-size:12px;color:var(--muted);margin-top:3px}
+.ac-desc{font-size:12px;color:var(--dim);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ac-status{font-size:11px;padding:3px 9px;border-radius:10px;font-weight:600;white-space:nowrap;flex-shrink:0}
+.ac-status.s-pending{background:rgba(112,112,160,.15);color:var(--muted)}
+.ac-status.s-in-progress{background:var(--task-wip-bg);color:var(--warn)}
+.ac-status.s-done{background:var(--task-done-bg);color:var(--ok)}
+.all-empty{text-align:center;color:var(--dim);padding:60px 0;font-size:15px}
 
-    /* modal */
-    .modal-bg {
-      display: none; position: fixed; inset: 0;
-      background: rgba(0,0,0,.72); backdrop-filter: blur(6px);
-      z-index: 2000; align-items: center; justify-content: center;
-    }
-    .modal-bg.open { display: flex; }
-    .modal {
-      background: var(--bg-card); border: 1px solid var(--border2);
-      border-radius: var(--r); padding: 28px;
-      width: min(480px, 94vw); animation: fadeUp .24s ease;
-    }
-    .modal h3 { font-size: 1.2rem; margin-bottom: 22px; }
-    .fr { margin-bottom: 15px; }
-    .fr label {
-      display: block; font-size: .68rem;
-      text-transform: uppercase; letter-spacing: .08em;
-      color: var(--muted); margin-bottom: 5px;
-    }
-    .fr select, .fr input, .fr textarea {
-      width: 100%; background: var(--bg-card2);
-      border: 1px solid var(--border); color: var(--text);
-      padding: 10px 13px; border-radius: 9px;
-      font-size: .9rem; font-family: 'Inter', sans-serif;
-      outline: none; transition: border-color .2s;
-    }
-    .fr select:focus, .fr input:focus, .fr textarea:focus { border-color: var(--acc); }
-    .fr textarea { resize: vertical; min-height: 76px; }
-    .modal-btns { display: flex; gap: 9px; margin-top: 20px; }
-    .btn-prim {
-      flex: 1; padding: 11px;
-      background: linear-gradient(135deg, var(--acc), var(--blue));
-      border: none; border-radius: 9px; color: #fff;
-      font-family: 'Oswald', sans-serif;
-      font-size: .88rem; font-weight: 600; cursor: pointer;
-      transition: opacity .2s;
-    }
-    .btn-prim:hover { opacity: .86; }
-    .btn-sec {
-      padding: 11px 18px; background: transparent;
-      border: 1px solid var(--border); color: var(--muted);
-      border-radius: 9px; font-family: 'Inter', sans-serif;
-      font-size: .9rem; cursor: pointer; transition: all .2s;
-    }
-    .btn-sec:hover { background: var(--bg-card2); color: var(--text); }
+/* ── ADMIN VIEW ── */
+.admin-view{flex:1;overflow-y:auto;padding:28px 20px;display:none;flex-direction:column;align-items:center}
+.admin-view.active{display:flex}
+.admin-wrap{width:100%;max-width:640px}
+.admin-hdr{display:flex;align-items:baseline;gap:12px;margin-bottom:22px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+.admin-title{font-size:20px;font-weight:700}
+.admin-sub{font-size:13px;color:var(--muted)}
+.user-card{display:flex;align-items:center;gap:14px;padding:14px 18px;margin-bottom:8px;border-radius:12px;background:var(--s2);border:1px solid var(--border);transition:.15s}
+.user-card:hover{border-color:var(--border2)}
+.u-avatar{width:44px;height:44px;border-radius:12px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:#fff;text-transform:uppercase;background:linear-gradient(135deg,var(--acc),#a855f7)}
+.u-avatar.is-admin{background:linear-gradient(135deg,#f59e0b,#ef4444)}
+.u-info{flex:1;min-width:0}
+.u-name{font-size:15px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:7px}
+.u-badge{font-size:10px;padding:2px 7px;border-radius:8px;font-weight:700}
+.u-badge.admin{background:rgba(245,158,11,.15);color:var(--warn)}
+.u-badge.you{background:var(--acc-d);color:var(--acc-l)}
+.u-meta{font-size:12px;color:var(--muted);margin-top:3px}
+.u-tasks{font-size:13px;color:var(--dim);text-align:right;margin-right:8px;white-space:nowrap;flex-shrink:0}
+.admin-loading{text-align:center;color:var(--muted);padding:60px 0;font-size:15px}
 
-    /* ─── FOOTER ─── */
-    footer {
-      padding: 36px 24px; text-align: center;
-      border-top: 1px solid var(--border);
-      color: var(--dim); font-size: .76rem;
-      position: relative; z-index: 1;
-    }
-    footer span { color: var(--muted); }
+/* ── CONTEXT MENU ── */
+.ctx-menu{position:fixed;z-index:300;background:var(--s2);border:1px solid var(--border2);border-radius:11px;padding:5px;box-shadow:0 12px 36px var(--shadow);min-width:190px;display:none;animation:ctxIn .12s ease}
+.ctx-menu.open{display:block}
+@keyframes ctxIn{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:none}}
+.ctx-item{display:flex;align-items:center;gap:9px;padding:8px 11px;border-radius:8px;font-size:13px;color:var(--text);cursor:pointer;transition:.1s background;border:none;background:transparent;width:100%;font-family:inherit;text-align:left}
+.ctx-item:hover{background:var(--s3)}
+.ctx-item.danger{color:var(--err)}
+.ctx-item.danger:hover{background:var(--err-d)}
+.ctx-item .ctx-icon{width:16px;text-align:center;font-size:13px;color:var(--muted);flex-shrink:0}
+.ctx-item.danger .ctx-icon{color:var(--err)}
+.ctx-sep{height:1px;background:var(--border);margin:4px 0}
+.ctx-sub-label{font-size:10px;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:.5px;padding:6px 11px 2px}
+.ctx-item .ctx-check{margin-left:auto;font-size:12px;color:var(--acc);opacity:0}
+.ctx-item.checked .ctx-check{opacity:1}
+.ctx-item.checked .ctx-icon{color:var(--acc)}
 
-    /* ─── SCROLL ANIMATION ─── */
-    .fu {
-      opacity: 0; transform: translateY(26px);
-      transition: opacity .55s ease, transform .55s ease;
-    }
-    .fu.vis { opacity: 1; transform: translateY(0); }
-    .fu:nth-child(2) { transition-delay: .08s; }
-    .fu:nth-child(3) { transition-delay: .14s; }
-    .fu:nth-child(4) { transition-delay: .2s; }
-    .fu:nth-child(5) { transition-delay: .26s; }
-    .fu:nth-child(6) { transition-delay: .32s; }
-  </style>
+/* ── MODAL ── */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(6px);z-index:100;display:none;align-items:center;justify-content:center;padding:20px}
+.overlay.open{display:flex}
+.modal{background:var(--s2);border:1px solid var(--border2);border-radius:18px;padding:28px;width:480px;max-width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 24px 64px var(--shadow);animation:mIn .2s ease}
+@keyframes mIn{from{opacity:0;transform:scale(.95) translateY(10px)}to{opacity:1;transform:none}}
+.modal-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+.modal-title{font-size:18px;font-weight:700}
+.modal-close{width:32px;height:32px;border-radius:8px;border:none;background:var(--s3);color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;transition:.15s}
+.modal-close:hover{background:var(--err-d);color:var(--err)}
+.fg{margin-bottom:16px}
+.fg label{display:block;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.fi{width:100%;padding:10px 13px;background:var(--s3);border:1px solid var(--border);border-radius:9px;color:var(--text);font-family:inherit;font-size:14px;outline:none;transition:.15s border-color;-webkit-appearance:none;appearance:none}
+.fi:focus{border-color:var(--acc)}
+textarea.fi{resize:vertical;min-height:76px}
+.fg.row{display:flex;gap:12px}
+.fg.row .fg{flex:1;margin-bottom:0}
+.status-btns{display:flex;gap:8px}
+.s-btn{flex:1;padding:8px;border-radius:8px;border:1px solid var(--border);background:var(--s3);color:var(--muted);cursor:pointer;text-align:center;font-size:13px;font-weight:500;transition:.15s;font-family:inherit}
+.s-btn.active{border-color:var(--acc);background:var(--acc-d);color:var(--acc-l)}
+.s-btn[data-s="done"].active{border-color:var(--ok);background:var(--task-done-bg);color:var(--ok)}
+.s-btn[data-s="in-progress"].active{border-color:var(--warn);background:var(--task-wip-bg);color:var(--warn)}
+.modal-footer{display:flex;gap:8px;justify-content:space-between;margin-top:22px;padding-top:18px;border-top:1px solid var(--border)}
+.modal-footer-left{display:flex;gap:8px}
+.modal-footer-right{display:flex;gap:8px}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);background:var(--s2);border:1px solid var(--border2);color:var(--text);padding:11px 22px;border-radius:10px;font-size:13px;font-weight:500;z-index:500;opacity:0;pointer-events:none;transition:.25s opacity;white-space:nowrap;box-shadow:0 4px 16px var(--shadow)}
+.toast.err{border-color:rgba(248,113,113,.4);background:var(--err-d);color:var(--err)}
+.toast.show{opacity:1}
+
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--dim)}
+input[type=date]::-webkit-calendar-picker-indicator,
+input[type=time]::-webkit-calendar-picker-indicator{filter:var(--picker-filter);cursor:pointer}
+</style>
 </head>
 <body>
 
-<!-- ═══ NAV ═══ -->
-<nav>
-  <div class="nav-logo">⚡ МОЙ ЗАЛ</div>
-  <ul class="nav-links">
-    <li><a href="#kbzhu">КБЖУ</a></li>
-    <li><a href="#training">Тренировки</a></li>
-    <li><a href="#progress">Прогресс</a></li>
-    <li><a href="#log">Дневник</a></li>
-  </ul>
-  <div class="hamburger" id="hbg" onclick="toggleMobNav()">
-    <span></span><span></span><span></span>
+<!-- AUTH SCREEN -->
+<div class="auth-screen" id="authScreen">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <div class="logo-icon">TM</div>
+      <span class="logo-name">TimeManager</span>
+    </div>
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="aTabLogin"    onclick="switchAuthTab('login')">Войти</button>
+      <button class="auth-tab"        id="aTabRegister" onclick="switchAuthTab('register')">Регистрация</button>
+    </div>
+    <div class="fg">
+      <label>Логин</label>
+      <input class="fi" id="aUsername" type="text" placeholder="Введите логин…" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false">
+    </div>
+    <div class="fg">
+      <label>Пароль</label>
+      <input class="fi" id="aPassword" type="password" placeholder="Введите пароль…" autocomplete="current-password" autocorrect="off" spellcheck="false">
+    </div>
+    <div class="fg" id="aConfirmFg" style="display:none">
+      <label>Подтверждение пароля</label>
+      <input class="fi" id="aConfirm" type="password" placeholder="Повторите пароль…" autocomplete="new-password" autocorrect="off" spellcheck="false">
+    </div>
+    <div class="auth-error" id="authError" style="display:none"></div>
+    <button class="btn btn-primary" id="authSubmitBtn" style="width:100%;justify-content:center;padding:12px" onclick="submitAuth()">Войти</button>
   </div>
-</nav>
-<div class="nav-mob" id="navMob">
-  <a href="#kbzhu"    onclick="closeMob()">КБЖУ</a>
-  <a href="#training" onclick="closeMob()">Тренировки</a>
-  <a href="#progress" onclick="closeMob()">Прогресс</a>
-  <a href="#log"      onclick="closeMob()">Дневник</a>
 </div>
 
-<main>
+<!-- MAIN APP -->
+<div class="app" id="app" style="display:none">
+  <header class="hdr">
+    <div class="logo">
+      <div class="logo-icon">TM</div>
+      <span class="logo-name">TimeManager</span>
+    </div>
+    <span class="hdr-today" id="hdrToday"></span>
+    <div class="hdr-space"></div>
+    <div class="tabs">
+      <button class="tab active" id="tabWeek"  onclick="switchTab('week')">Неделя</button>
+      <button class="tab"        id="tabAll"   onclick="switchTab('all')">Все дела</button>
+      <button class="tab"        id="tabAdmin" onclick="switchTab('admin')" style="display:none">⚙ Админ</button>
+    </div>
+    <div class="user-chip">
+      <div class="uc-avatar" id="ucAvatar"></div>
+      <span class="uc-name" id="ucName"></span>
+    </div>
+    <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="Сменить тему">🌙</button>
+    <button class="btn btn-ghost btn-sm" onclick="logout()">Выйти</button>
+    <button class="btn btn-primary" onclick="openModal()">+ Новое дело</button>
+  </header>
 
-<!-- ═══ HERO ═══ -->
-<section id="hero">
-  <div class="hero-glow-1"></div>
-  <div class="hero-glow-2"></div>
-  <div class="hero-content">
-    <div class="hero-badge"><span class="badge-dot"></span>Активный режим — Пн · Ср · Сб</div>
-    <h1>
-      МОЙ<br>
-      <span class="grad">ЛИЧНЫЙ ЗАЛ</span>
-    </h1>
-    <p class="hero-sub">Всё для тренировок в одном месте — расписание, техника, КБЖУ и прогресс.</p>
-    <div class="hero-stats">
-      <div class="hs"><span class="hs-val">3</span><span class="hs-lbl">Дня в неделю</span></div>
-      <div class="hs-div"></div>
-      <div class="hs"><span class="hs-val">14</span><span class="hs-lbl">Упражнений</span></div>
-      <div class="hs-div"></div>
-      <div class="hs"><span class="hs-val">1845</span><span class="hs-lbl">Ккал / день</span></div>
-      <div class="hs-div"></div>
-      <div class="hs"><span class="hs-val">160г</span><span class="hs-lbl">Белка / день</span></div>
+  <div id="weekView" style="display:flex;flex-direction:column;flex:1;overflow:hidden;min-height:0">
+    <div class="cal-head">
+      <div class="time-gutter"></div>
+      <div class="day-headers" id="dayHeaders"></div>
+    </div>
+    <div class="allday-wrap">
+      <div class="allday-gutter">весь<br>день</div>
+      <div class="allday-cells" id="alldayCells"></div>
+    </div>
+    <div class="cal-scroll" id="calScroll">
+      <div class="cal-inner">
+        <div class="time-labels" id="timeLabels"></div>
+        <div class="day-cols" id="dayCols"></div>
+      </div>
+    </div>
+    <div class="future-panel" id="futurePanel">
+      <div class="fp-header" onclick="toggleFuture()">
+        <span style="font-size:14px">📅</span>
+        <span class="fp-title">Запланировано на будущее</span>
+        <span class="fp-count" id="fpCount">0</span>
+        <span class="fp-arrow">▼</span>
+      </div>
+      <div class="fp-body" id="fpBody"></div>
     </div>
   </div>
-</section>
 
-<!-- ═══ КБЖУ ═══ -->
-<section id="kbzhu">
-  <div class="section">
-    <div class="sec-head fu">
-      <div class="sec-lbl">Питание</div>
-      <h2 class="sec-title">КБЖУ на день</h2>
-      <p class="sec-desc">Суточный план макронутриентов для поддержки роста мышц и восстановления.</p>
-    </div>
-    <div class="kbzu-grid">
-      <div class="kbzu-card kal fu">
-        <div class="kbzu-icon">🔥</div>
-        <div class="kbzu-lbl">Калории</div>
-        <div class="kbzu-val">1845<span class="kbzu-unit"> ккал</span></div>
-        <div class="kbzu-bar"><div class="kbzu-fill"></div></div>
-      </div>
-      <div class="kbzu-card prot fu">
-        <div class="kbzu-icon">💪</div>
-        <div class="kbzu-lbl">Белки</div>
-        <div class="kbzu-val">160<span class="kbzu-unit"> г</span></div>
-        <div class="kbzu-bar"><div class="kbzu-fill"></div></div>
-      </div>
-      <div class="kbzu-card fat fu">
-        <div class="kbzu-icon">🥑</div>
-        <div class="kbzu-lbl">Жиры</div>
-        <div class="kbzu-val">65<span class="kbzu-unit"> г</span></div>
-        <div class="kbzu-bar"><div class="kbzu-fill"></div></div>
-      </div>
-      <div class="kbzu-card carb fu">
-        <div class="kbzu-icon">⚡</div>
-        <div class="kbzu-lbl">Углеводы</div>
-        <div class="kbzu-val">155<span class="kbzu-unit"> г</span></div>
-        <div class="kbzu-bar"><div class="kbzu-fill"></div></div>
-      </div>
-    </div>
-    <div class="kbzu-note fu">
-      💡 <span><strong>Распределение:</strong> белки дают 640 ккал (35%), жиры — 585 ккал (32%), углеводы — 620 ккал (33%). Белок — главный приоритет для синтеза мышц.</span>
-    </div>
-  </div>
-</section>
+  <div class="all-view"   id="allView"></div>
+  <div class="admin-view" id="adminView"></div>
+</div>
 
-<!-- ═══ ТРЕНИРОВКИ ═══ -->
-<section id="training">
-  <div class="section">
-    <div class="sec-head fu">
-      <div class="sec-lbl">Расписание</div>
-      <h2 class="sec-title">План тренировок</h2>
-      <p class="sec-desc">Нажми на день недели, чтобы отметить выполненную тренировку.</p>
-    </div>
-
-    <!-- Week bar -->
-    <div class="week-bar fu" id="weekBar">
-      <div class="wc train"  data-day="mon" onclick="toggleDay('mon')">
-        <div class="wc-check">✓</div>
-        <div class="wc-name">Пн</div>
-        <div class="wc-type">Плечи · Три</div>
-      </div>
-      <div class="wc rest"   data-day="tue" onclick="toggleDay('tue')">
-        <div class="wc-check">✓</div>
-        <div class="wc-name">Вт</div>
-        <div class="wc-type">Отдых</div>
-      </div>
-      <div class="wc cardio" data-day="wed" onclick="toggleDay('wed')">
-        <div class="wc-check">✓</div>
-        <div class="wc-name">Ср</div>
-        <div class="wc-type">Кардио</div>
-      </div>
-      <div class="wc rest"   data-day="thu" onclick="toggleDay('thu')">
-        <div class="wc-check">✓</div>
-        <div class="wc-name">Чт</div>
-        <div class="wc-type">Отдых</div>
-      </div>
-      <div class="wc rest"   data-day="fri" onclick="toggleDay('fri')">
-        <div class="wc-check">✓</div>
-        <div class="wc-name">Пт</div>
-        <div class="wc-type">Отдых</div>
-      </div>
-      <div class="wc train"  data-day="sat" onclick="toggleDay('sat')">
-        <div class="wc-check">✓</div>
-        <div class="wc-name">Сб</div>
-        <div class="wc-type">Спина · Бицепс</div>
-      </div>
-      <div class="wc rest"   data-day="sun" onclick="toggleDay('sun')">
-        <div class="wc-check">✓</div>
-        <div class="wc-name">Вс</div>
-        <div class="wc-type">Отдых</div>
-      </div>
-    </div>
-
-    <!-- Tabs -->
-    <div class="tabs-row fu">
-      <button class="tab-btn active" onclick="showTab('mon',this)">
-        <span class="tab-sub">Понедельник</span>ПЛЕЧИ + ТРИЦЕПС
-      </button>
-      <button class="tab-btn" onclick="showTab('wed',this)">
-        <span class="tab-sub">Среда</span>КАРДИО
-      </button>
-      <button class="tab-btn" onclick="showTab('sat',this)">
-        <span class="tab-sub">Суббота</span>СПИНА + БИЦЕПС
-      </button>
-    </div>
-
-    <!-- ── TAB MON ── -->
-    <div class="tab-pane active" id="tab-mon">
-      <div class="ex-grid">
-
-        <!-- 1 Жим гантелей -->
-        <div class="ex-card fu">
-          <div class="ex-head">
-            <div class="ex-num">1</div>
-            <div class="ex-title-wrap">
-              <div class="ex-name">Жим гантелей сидя</div>
-              <span class="mtag mt-sho">Плечи (передние + средние дельты)</span>
-            </div>
-          </div>
-          <div class="ex-stats">
-            <div class="sp"><div class="sv">4</div><div class="sl">Подх.</div></div>
-            <div class="sp"><div class="sv">10–12</div><div class="sl">Повт.</div></div>
-            <div class="sp"><div class="sv">14 кг</div><div class="sl">Вес</div></div>
-          </div>
-          <div class="ex-foot">
-            <div class="rest-pill">⏱ 90–120 с</div>
-            <button class="timer-btn" onclick="startTimer(this,90)">▶ Таймер</button>
-          </div>
-          <div class="ex-acc">
-            <div class="ac">
-              <button class="ac-btn" onclick="toggleAc(this)">
-                <span class="ac-ic">📋</span> Техника выполнения
-                <span class="ac-arr">▼</span>
-              </button>
-              <div class="ac-body">
-                <ul class="tech-list">
-                  <li><span class="t-n">1</span>Сядьте прямо, спину прижмите к спинке скамьи. Гантели у плеч на уровне ушей.</li>
-                  <li><span class="t-n">2</span>Локти направлены вниз и чуть вперёд (угол ~45°) — не разводите широко в стороны.</li>
-                  <li><span class="t-n">3</span>Жмите вверх по дуге, сближая гантели над головой. Не блокируйте локти в верхней точке.</li>
-                  <li><span class="t-n">4</span>Контролируемо опускайте в исходное положение — 2–3 секунды вниз.</li>
-                </ul>
-              </div>
-            </div>
-            <div class="ac">
-              <button class="ac-btn" onclick="toggleAc(this)">
-                <span class="ac-ic">⚠️</span> Частые ошибки
-                <span class="ac-arr">▼</span>
-              </button>
-              <div class="ac-body">
-                <ul class="err-list">
-                  <li><span class="err-i">!</span>Излишний прогиб в пояснице — это снимает нагрузку с дельт и грузит позвоночник.</li>
-                  <li><span class="err-i">!</span>Слишком широкое разведение локтей — вызывает импинджмент плечевого сустава.</li>
-                  <li><span class="err-i">!</span>Резкое бросание веса вниз — теряется контроль и нагрузка.</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 2 Разведение в стороны -->
-        <div class="ex-card fu">
-          <div class="ex-head">
-            <div class="ex-num">2</div>
-            <div class="ex-title-wrap">
-              <div class="ex-name">Разведение гантелей в стороны</div>
-              <span class="mtag mt-sho">Средние дельты</span>
-            </div>
-          </div>
-          <div class="ex-stats">
-            <div class="sp"><div class="sv">3</div><div class="sl">Подх.</div></div>
-            <div class="sp"><div class="sv">12–15</div><div class="sl">Повт.</div></div>
-            <div class="sp"><div class="sv">8 кг</div><div class="sl">Вес</div></div>
-          </div>
-          <div class="ex-foot">
-            <div class="rest-pill">⏱ 60–90 с</div>
-            <button class="timer-btn" onclick="startTimer(this,60)">▶ Таймер</button>
-          </div>
-          <div class="ex-acc">
-            <div class="ac">
-              <button class="ac-btn" onclick="toggleAc(this)">
-                <span class="ac-ic">📋</span> Техника выполнения
-                <span class="ac-arr">▼</span>
-              </button>
-              <div class="ac-body">
-                <ul class="tech-list">
-                  <li><span class="t-n">1</span>Стоя, лёгкий наклон корпуса вперёд 10–15° — так средняя дельта работает чище.</li>
-                  <li><span class="t-n">2</span>Небольшой изгиб в локтях на протяжении всего движения (не выпрямляйте до конца).</li>
-                  <li><span class="t-n">3</span>Поднимайте до уровня плеч, мизинец чуть выше большого пальца в верхней точке.</li>
-                  <li><span class="t-n">4</span>Медленно опускайте, не бросайте гантели — 2 секунды вниз.</li>
-                </ul>
-              </div>
-            </div>
-            <div class="ac">
-              <button class="ac-btn" onclick="toggleAc(this)">
-                <span class="ac-ic">⚠️</span> Частые ошибки
-                <span class="ac-arr">▼</span>
-              </button>
-              <div class="ac-body">
-                <ul class="err-list">
-                  <li><span class="err-i">!</span>Подъём выше уровня плеч — начнёт включаться трапеция, снимая нагрузку с дельт.</li>
-                  <li><span class="err-i">!</span>Раскачивание корпусом — инерция убивает эффект изоляции.</li>
-                  <li><span class="err-i">!</span>Слишком тяжёлый вес — это упражнение работает на «лёгком», не гонитесь за весом.</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 3 Face pull -->
-        <div class="ex-card fu">
-          <div class="ex-head">
-            <div class="ex-num">3</div>
-            <div class="ex-title-wrap">
-              <div class="ex-name">Face pull на блоке</div>
-              <span class="mtag mt-sho">Задние дельты · Ротаторная манжета</span>
-            </div>
-          </div>
-          <div class="ex-stats">
-            <div class="sp"><div class="sv">3</div><div class="sl">Подх.</div></div>
-            <div class="sp"><div class="sv">15–20</div><div class="sl">Повт.</div></div>
-            <div class="sp"><div class="sv">50 кг</div><div class="sl">Вес</div></div>
-          </div>
-          <div class="ex-foot">
-            <div class="rest-pill">⏱ 60–90 с</div>
-            <button class="timer-btn" onclick="startTimer(this,60)">▶ Таймер</button>
-          </div>
-          <div class="ex-acc">
-            <div class="ac">
-              <button class="ac-btn" onclick="toggleAc(this)">
-                <span class="ac-ic">📋</span> Техника выполнения
-                <span class="ac-arr">▼</span>
-              </button>
-              <div class="ac-body">
-                <ul class="tech-list">
-                  <li><span class="t-n">1</span>Установите трос на уровне лица или чуть выше, используйте верёвочную рукоять.</li>
-                  <li><span class="t-n">2</span>Тяните рукоять к переносице, разводя руки в стороны — как будто натягиваете лук.</li>
-                  <li><span class="t-n">3</span>Локти должны быть выше уровня плеч в пиковой точке — это обязательное условие.</li>
-                  <li><span class="t-n">4</span>Зафиксируйте на 1 секунду, сжимая лопатки, затем медленно возвращайте.</li>
-                </ul>
-              </div>
-            </div>
-            <div class="ac">
-              <button class="ac-btn" onclick="toggleAc(this)">
-                <span class="ac-ic">⚠️</span> Частые ошибки
-                <span class="ac-arr">▼</span>
-              </button>
-              <div class="ac-body">
-                <ul class="err-list">
-                  <li><span class="err-i">!</span>Локти ниже плеч — в такой позиции задние дельты почти не работают.</li>
-                  <li><span class="err-i">!</span>Слишком большой вес — качество движения важнее цифры на стеке.</li>
-                  <li><span class="err-i">!</span>Нет паузы в пиковой точке — теряется максимальное сокращение.</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 4 Французский жим -->
-        <div class="ex-card fu">
-          <div class="ex-head">
-            <div class="ex-num">4</div>
-            <div class="ex-title-wrap">
-              <div class="ex-name">Французский жим EZ</div>
-              <span class="mtag mt-tri">Трицепс (длинная головка)</span>
-            </div>
-          </div>
-          <div class="ex-stats">
-            <div class="sp"><div class="sv">3</div><div class="sl">Подх.</div></div>
-            <div class="sp"><div class="sv">10–12</div><div class="sl">Повт.</div></div>
-            <div class="sp"><div class="sv">+15 кг</div><div class="sl">Вес</div></div>
-          </div>
-          <div class="ex-foot">
-            <div class="rest-pill">⏱ 90 с</div>
-            <button class="timer-btn" onclick="startTimer(this,90)">▶ Таймер</button>
-          </div>
-          <div class="ex-acc">
-            <div class="ac">
-              <button class="ac-btn" onclick="toggleAc(this)">
-                <span class="ac-ic">📋</span> Техника выполнения
-                <span class="ac-arr">▼</span>
-              </button>
-              <div class="ac-body">
-                <ul class="tech-list">
-                  <li><span class="t-n">1</span>Лёжа на горизонтальной скамье, гриф над грудью на вытянутых руках.</li>
-                  <li><span class="t-n">2</span>Медленно опускайте гриф за голову, сгибая руки только в локтях — плечи неподвижны.</li>
-                  <li><span class="t-n">3</span>Локти смотрят строго в потолок во время всего движения — это ключевое.</li>
-                  <li><span class="t-n">4</span>Разгибайте до исходного положения — полная амплитуда даёт максимум длинной головки.</li>
-                </ul>
-              </div>
-            </div>
-            <div class="ac">
-              <button class="ac-btn" onclick="toggleAc(this)">
-                <span class="ac-ic">⚠️</span> Частые ошибки
-                <span class="ac-arr">▼</span>
-              </button>
-              <div class="ac-body">
-                <ul class="err-list">
-                  <li><span class="err-i">!</span>Локти расходятся в стороны — теряется изоляция длинной головки трицепса.</li>
-                  <li><span class="err-i">!</span>Движение плечами — это уже не французский жим, а что-то другое.</li>
-                  <li><span class="err-i">!</span>Слишком быстрое опускание — риск травмы локтевого сустава, работайте медленно.</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 5 Трицепс на блоке (палка) -->
-        <div class="ex-card fu">
-          <div class="ex-head">
-            <div class="ex-num">5</div>
-            <div class="ex-title-wrap">
-              <div class="ex-name">Трицепс на блоке (палка)</div>
-              <span class="mtag mt-tri">Все три головки трицепса</span>
-            </div>
-          </div>
-          <div class="ex-stats">
-            <div class="sp"><div class="sv">3</div><div class="sl">Подх.</div></div>
-            <div class="sp"><div class="sv">12–15</div><div class="sl">Повт.</div></div>
-            <div class="sp"><div class="sv">45 кг</div><div class="sl">Вес</div></div>
-          </div>
-          <div class="ex-foot">
-            <div class="rest-pill">⏱ 60–90 с</div>
-            <button class="timer-btn" onclick="startTimer(this,60)">▶ Таймер</button>
-          </div>
-          <div class="ex-acc">
-            <div class="ac">
-              <button class="ac-btn" onclick="toggleAc(this)">
-                <span class="ac-ic">📋</span> Техника выполнения
-                <span class="ac-arr">▼</span>
-              </button>
-              <div class="ac-body">
-                <ul class="tech-list">
-                  <li><span class="t-n">1</span>Станьте близко к блоку, лёгкий наклон корпуса вперёд 15–20°.</li>
-                  <li><span class="t-n">2</span>Локти прижаты к туловищу и неподвижны на протяжении всего движения.</li>
-                  <li><span class="t-n">3</span>Жмите вниз до полного разгибания — в нижней точке сделайте паузу и сожмите трицепс.</li>
-                  <li><span class="t-n">4</span>Медленно возвращайте вверх, не допуская подъёма локтей.</li>
-                </ul>
-              </div>
-            </div>
-            <div class="ac">
-              <button class="ac-btn" onclick="toggleAc(this)">
-                <span class="ac-ic">⚠️</span> Частые ошибки
-                <span class="ac-arr">▼</span>
-              </button>
-              <div class="ac-body">
-                <ul class="err-list">
-                  <li><span class="err-i">!</span>Локти уходят от тела — превращает движение в жим, включает грудь.</li>
-                  <li><span class="err-i">!</span>Помощь корпусом — раскачка = нечестные повторения, риск травмы.</li>
-                  <li><span class="err-i">!</span>Неполное разгибание в нижней точке — теряется пиковое сокращение.</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 6 Трицепс обратный хват -->
-        <div class="ex-card fu">
-          <div class="ex-head">
-            <div class="ex-num">6</div>
-            <div class="ex-title-wrap">
-              <div class="ex-name">Трицепс на блоке обратным хватом</div>
-              <span class="mtag mt-tri">Медиальная головка трицепса</span>
-            </div>
-          </div>
-          <div class="ex-stats">
-            <div class="sp"><div class="sv">3</div><div class="sl">Подх.</div></div>
-            <div class="sp"><div class="sv">12–15</div><div class="sl">Повт.</div></div>
-            <div class="sp"><div class="sv">35 кг</div><div class="sl">Вес</div></div>
-          </div>
-          <div class="ex-foot">
-            <div class="rest-pill">⏱ 60–90 с</div>
-            <button class="timer-btn" onclick="startTimer(this,60)">▶ Таймер</button>
-          </div>
-          <div class="ex-acc">
-            <div class="ac">
-              <button class="ac-btn" onclick="toggleAc(this)">
-                <span class="ac-ic">📋</span> Техника выполнения
-                <span class="ac-arr">▼</span>
-              </button>
-              <div class="ac-body">
-                <ul class="tech-list">
-                  <li><span class="t-n">1</span>Хват снизу — ладони смотрят вверх (обратный хват).</li>
-                  <li><span class="t-n">2</span>Локти прижаты к телу, как и в обычном варианте — это обязательное условие.</li>
-                  <li><span class="t-n">3</span>Жмите вниз до полного разгибания, контролируя запястья.</li>
-                  <li><span class="t-n">4</span>Медленно возвращайте — не позволяйте весу тянуть руки вверх неконтролируемо.</li>
-                </ul>
-              </div>
-            </div>
-            <div class="ac">
-              <button class="ac-btn" onclick="toggleAc(this)">
-                <span class="ac-ic">⚠️</span> Частые ошибки
-                <span class="ac-arr">▼</span>
-              </button>
-              <div class="ac-body">
-                <ul class="err-list">
-                  <li><span class="err-i">!</span>Запястья провисают под весом — держите их нейтрально.</li>
-                  <li><span class="err-i">!</span>Локти уходят вперёд в верхней точке — теряется натяжение трицепса.</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 7 Планка -->
-        <div class="ex-card fu">
-          <div class="ex-head">
-            <div class="ex-num">7</div>
-            <div class="ex-title-wrap">
-              <div class="ex-name">Планка</div>
-              <span class="mtag mt-cor">Кор · Поперечная м. живота</span>
-            </div>
-          </div>
-          <div class="ex-stats">
-            <div class="sp"><div class="sv">3</div><div class="sl">Подх.</div></div>
-            <div class="sp"><div class="sv">80 с</div><div class="sl">Время</div></div>
-          </div>
-          <div class="ex-foot">
-            <div class="rest-pill">⏱ Отдых 60 с</div>
-            <button class="timer-btn" onclick="startTimer(this,80)">▶ 80 сек</button>
-          </div>
-          <div class="ex-acc">
-            <div class="ac">
-              <button class="ac-btn" onclick="toggleAc(this)">
-                <span class="ac-ic">📋</span> Техника выполнения
-                <span class="ac-arr">▼</span>
-              </button>
-              <div class="ac-body">
-                <ul class="tech-list">
-                  <li><span class="t-n">1</span>Опора на предплечья (локти под плечами) и носки, тело параллельно полу.</li>
-                  <li><span class="t-n">2</span>Тело — прямая линия от пяток до затылка. Таз нейтрально.</li>
-                  <li><span class="t-n">3</span>Напрягите кор: представьте, что вас вот-вот ударят в живот.</li>
-                  <li><span class="t-n">4</span>Дышите ровно — задержка дыхания повышает давление и снижает эффект.</li>
-                </ul>
-              </div>
-            </div>
-            <div class="ac">
-              <button class="ac-btn" onclick="toggleAc(this)">
-                <span class="ac-ic">⚠️</span> Частые ошибки
-                <span class="ac-arr">▼</span>
-              </button>
-              <div class="ac-body">
-                <ul class="err-list">
-                  <li><span class="err-i">!</span>Поднятый таз — снимает нагрузку с пресса и не считается планкой.</li>
-                  <li><span class="err-i">!</span>Прогиб в пояснице — нагрузка уходит на поясницу, риск боли.</li>
-                  <li><span class="err-i">!</span>Задержка дыхания — снижает время под нагрузкой и перегружает сосуды.</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 8 Скручивания / подъём ног -->
-        <div class="ex-card fu">
-          <div class="ex-head">
-            <div class="ex-num">8</div>
-            <div class="ex-title-wrap">
-              <div class="ex-name">Скручивания / подъём ног в упоре</div>
-              <span class="mtag mt-cor">Прямая мышца живота</span>
-            </div>
-          </div>
-          <div class="ex-stats">
-            <div class="sp"><div class="sv">3</div><div class="sl">Подх.</div></div>
-            <div class="sp"><div class="sv">20</div><div class="sl">Повт.</div></div>
-          </div>
-          <div class="ex-foot">
-            <div class="rest-pill">⏱ Отдых 60 с</div>
-            <button class="timer-btn" onclick="startTimer(this,60)">▶ Таймер</button>
-          </div>
-          <div class="ex-acc">
-            <div class="ac">
-              <button class="ac-btn" onclick="toggleAc(this)">
-                <span class="ac-ic">📋</span> Техника выполнения
-                <span class="ac-arr">▼</span>
-              </button>
-              <div class="ac-body">
-                <ul class="tech-list">
-                  <li><span class="t-n">1</span>Скручивания: лёжа, руки за головой, подбородок к груди — не тяните за шею.</li>
-                  <li><span class="t-n">2</span>Поднимайтесь скручиванием, не подъёмом всего туловища — верхние 30° амплитуды.</li>
-                  <li><span class="t-n">3</span>Подъём ног в упоре на локти: опора на предплечья, медленно поднимайте прямые ноги.</li>
-                  <li><span class="t-n">4</span>Контролируйте опускание — не бросайте ноги вниз, это убивает напряжение в прессе.</li>
-                </ul>
-              </div>
-            </div>
-            <div class="ac">
-              <button class="ac-btn" onclick="toggleAc(this)">
-                <span class="ac-ic">⚠️</span> Частые ошибки
-                <span class="ac-arr">▼</span>
-              </button>
-              <div class="ac-body">
-                <ul class="err-list">
-                  <li><span class="err-i">!</span>Тяга за шею руками — нагружает шейный отдел, не пресс.</li>
-                  <li><span class="err-i">!</span>Инерционные рывки — убирают постоянное напряжение с мышц живота.</li>
-                  <li><span class="err-i">!</span>Полное опускание лопаток на пол — теряется тонус пресса между повторениями.</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div><!-- /ex-grid -->
-    </div><!-- /tab-mon -->
-
-    <!-- ── TAB WED ── -->
-    <div class="tab-pane" id="tab-wed">
-
-      <div class="cardio-summary fu">
-        <div class="c-sum-card">
-          <div class="cs-val">~28</div>
-          <div class="cs-lbl">мин общее время</div>
-        </div>
-        <div class="c-sum-card">
-          <div class="cs-val">Level 9</div>
-          <div class="cs-lbl">основное сопротивление</div>
-        </div>
-        <div class="c-sum-card">
-          <div class="cs-val">HIIT</div>
-          <div class="cs-lbl">интервальный протокол</div>
-        </div>
-        <div class="c-sum-card">
-          <div class="cs-val">Велосипед</div>
-          <div class="cs-lbl">тип кардиотренажёра</div>
-        </div>
-      </div>
-
-      <div class="timeline fu">
-
-        <div class="tl-item">
-          <div class="tl-connector">
-            <div class="tl-dot" style="background:var(--green)"></div>
-            <div class="tl-seg"></div>
-          </div>
-          <div class="tl-card">
-            <div class="tl-phase" style="color:var(--green)">Фаза 1</div>
-            <div class="tl-title">🔄 Разминка</div>
-            <div class="tl-chips">
-              <div class="chip"><strong>5 мин</strong>Время</div>
-              <div class="chip"><strong>Level 8</strong>Сопротивление</div>
-              <div class="chip"><strong>25 speed</strong>Скорость</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="tl-item">
-          <div class="tl-connector">
-            <div class="tl-dot" style="background:var(--red)"></div>
-            <div class="tl-seg"></div>
-          </div>
-          <div class="tl-card">
-            <div class="tl-phase" style="color:var(--red)">Фаза 2</div>
-            <div class="tl-title">⚡ HIIT — интервалы</div>
-            <div class="tl-chips">
-              <div class="chip"><strong>Level 9</strong>Сопротивление</div>
-              <div class="chip"><strong>35–40 speed</strong>Интенсив</div>
-              <div class="chip"><strong>25 speed</strong>Отдых</div>
-            </div>
-            <div class="hiit-grid">
-              <div class="hb on">🔥 30 сек</div>
-              <div class="hb off">🌬 1 мин</div>
-              <div class="hb on">🔥 30 сек</div>
-              <div class="hb off">🌬 1 мин</div>
-              <div class="hb on">🔥 30 сек</div>
-              <div class="hb off">🌬 1 мин</div>
-              <div class="hb on">🔥 30 сек</div>
-              <div class="hb off">🌬 1 мин</div>
-              <div class="hb on" style="opacity:.55">× повторять по ощущениям</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="tl-item">
-          <div class="tl-connector">
-            <div class="tl-dot" style="background:var(--blue)"></div>
-            <div class="tl-seg"></div>
-          </div>
-          <div class="tl-card">
-            <div class="tl-phase" style="color:var(--blue)">Фаза 3</div>
-            <div class="tl-title">🚴 Равномерное кардио</div>
-            <div class="tl-chips">
-              <div class="chip"><strong>10 мин</strong>Время</div>
-              <div class="chip"><strong>Level 9</strong>Сопротивление</div>
-              <div class="chip"><strong>25 speed</strong>Скорость</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="tl-item">
-          <div class="tl-connector">
-            <div class="tl-dot" style="background:var(--acc)"></div>
-            <div class="tl-seg"></div>
-          </div>
-          <div class="tl-card">
-            <div class="tl-phase" style="color:var(--acc)">Фаза 4</div>
-            <div class="tl-title">🧘 Заминка</div>
-            <div class="tl-chips">
-              <div class="chip"><strong>3 мин</strong>Время</div>
-              <div class="chip"><strong>Level 8</strong>Сопротивление</div>
-              <div class="chip"><strong>25 speed</strong>Скорость</div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div><!-- /tab-wed -->
-
-    <!-- ── TAB SAT ── -->
-    <div class="tab-pane" id="tab-sat">
-      <div class="ex-grid">
-
-        <!-- 1 Подтягивания -->
-        <div class="ex-card fu">
-          <div class="ex-head">
-            <div class="ex-num">1</div>
-            <div class="ex-title-wrap">
-              <div class="ex-name">Подтягивания</div>
-              <span class="mtag mt-bac">Широчайшие · Бицепс</span>
-            </div>
-          </div>
-          <div class="ex-stats">
-            <div class="sp"><div class="sv">3</div><div class="sl">Подх.</div></div>
-            <div class="sp"><div class="sv">Макс</div><div class="sl">Повт.</div></div>
-          </div>
-          <div class="ex-foot">
-            <div class="rest-pill">⏱ 120–180 с</div>
-            <button class="timer-btn" onclick="startTimer(this,120)">▶ Таймер</button>
-          </div>
-          <div class="ex-acc">
-            <div class="ac">
-              <button class="ac-btn" onclick="toggleAc(this)">
-                <span class="ac-ic">📋</span> Техника выполнения
-                <span class="ac-arr">▼</span>
-              </button>
-              <div class="ac-body">
-                <ul class="tech-list">
-                  <li><span class="t-n">1</span>Хват чуть шире плеч, ладони от себя (пронация). Повисните с полным разгибанием рук.</li>
-                  <li><span class="t-n">2</span>Сведите лопатки и потяните локти вниз и назад — тяните грудь к перекладине.</li>
-                  <li><span class="t-n">3</span>Поднимайтесь до уровня, когда подбородок оказывается выше перекладины.</li>
-                  <li><span class="t-n">4</span>Медленно опускайтесь до полного разгибания — 2–3 секунды вниз.</li>
-                </ul>
-              </div>
-            </div>
-            <div class="ac">
-              <button class="ac-btn" onclick="toggleAc(this)">
-                <span class="ac-ic">⚠️</span> Частые ошибки
-                <span class="ac-arr">▼</span>
-              </button>
-              <div class="ac-body">
-                <ul class="err-list">
-                  <li><span class="err-i">!</span>Неполная амплитуда — половинчатые подтягивания не дают результата.</li>
-                  <li><span class="err-i">!</span>Раскачивание корпусом — инерция перекладывает работу с мышц спины.</li>
-                  <li><span class="err-i">!</span>Тяга преимущественно бицепсом, без активации спины — не сводите лопатки.</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 2 Вертикальная тяга -->
-        <div class="ex-card fu">
-          <div class="ex-head">
-            <div class="ex-num">2</div>
-            <div class="ex-title-wrap">
-              <div class="ex-name">Вертикальная тяга (верхний блок)</div>
-              <span class="mtag mt-bac">Широчайшие · Задние дельты</span>
-            </div>
-          </div>
-          <div class="ex-stats">
-            <div class="sp"><div class="sv">3</div><div class="sl">Подх.</div></div>
-            <div class="sp"><div class="sv">10–12</div><div class="sl">Повт.</div></div>
-            <div class="sp"><div class="sv">45 кг</div><div class="sl">Вес</div></div>
-          </div>
-          <div class="ex-foot">
-            <div class="rest-pill">⏱ 90–120 с</div>
-            <button class="timer-btn" onclick="startTimer(this,90)">▶ Таймер</button>
-          </div>
-          <div class="ex-acc">
-            <div class="ac">
-              <button class="ac-btn" onclick="toggleAc(this)">
-                <span class="ac-ic">📋</span> Техника выполнения
-                <span class="ac-arr">▼</span>
-              </button>
-              <div class="ac-body">
-                <ul class="tech-list">
-                  <li><span class="t-n">1</span>Хват чуть шире плеч. Зафиксируйте колени под упором. Лёгкий наклон назад 15–20°.</li>
-                  <li><span class="t-n">2</span>Потяните гриф к верхней части груди, инициируя движение сведением лопаток.</li>
-                  <li><span class="t-n">3</span>Локти ведите вниз и назад — не в стороны.</li>
-                  <li><span class="t-n">4</span>Медленно выпрямляйте руки вверху до полного растяжения широчайших.</li>
-                </ul>
-              </div>
-            </div>
-            <div class="ac">
-              <button class="ac-btn" onclick="toggleAc(this)">
-                <span class="ac-ic">⚠️</span> Частые ошибки
-                <span class="ac-arr">▼</span>
-              </button>
-              <div class="ac-body">
-                <ul class="err-list">
-                  <li><span class="err-i">!</span>Слишком сильный наклон назад — превращает упражнение в горизонтальную тягу.</li>
-                  <li><span class="err-i">!</span>Тяга только за счёт бицепса — инициируйте движение спиной, не руками.</li>
-                  <li><span class="err-i">!</span>Неполное выпрямление рук вверху — теряется растяжение широчайших.</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 3 Горизонтальная тяга -->
-        <div class="ex-card fu">
-          <div class="ex-head">
-            <div class="ex-num">3</div>
-            <div class="ex-title-wrap">
-              <div class="ex-name">Горизонтальная тяга (нижний блок)</div>
-              <span class="mtag mt-bac">Средняя спина · Ромбовидные</span>
-            </div>
-          </div>
-          <div class="ex-stats">
-            <div class="sp"><div class="sv">3</div><div class="sl">Подх.</div></div>
-            <div class="sp"><div class="sv">10–12</div><div class="sl">Повт.</div></div>
-            <div class="sp"><div class="sv">45 кг</div><div class="sl">Вес</div></div>
-          </div>
-          <div class="ex-foot">
-            <div class="rest-pill">⏱ 90–120 с</div>
-            <button class="timer-btn" onclick="startTimer(this,90)">▶ Таймер</button>
-          </div>
-          <div class="ex-acc">
-            <div class="ac">
-              <button class="ac-btn" onclick="toggleAc(this)">
-                <span class="ac-ic">📋</span> Техника выполнения
-                <span class="ac-arr">▼</span>
-              </button>
-              <div class="ac-body">
-                <ul class="tech-list">
-                  <li><span class="t-n">1</span>Спина прямая, лёгкий естественный прогиб в пояснице. Ноги слегка согнуты.</li>
-                  <li><span class="t-n">2</span>Тяните рукоять к поясу, ведя локти вдоль туловища назад.</li>
-                  <li><span class="t-n">3</span>В пиковой точке — пауза 1 сек, максимально сжимая лопатки вместе.</li>
-                  <li><span class="t-n">4</span>Медленно выпрямляйте руки вперёд с полным растяжением.</li>
-                </ul>
-              </div>
-            </div>
-            <div class="ac">
-              <button class="ac-btn" onclick="toggleAc(this)">
-                <span class="ac-ic">⚠️</span> Частые ошибки
-                <span class="ac-arr">▼</span>
-              </button>
-              <div class="ac-body">
-                <ul class="err-list">
-                  <li><span class="err-i">!</span>Округление спины при тяге — нагрузка уходит с мышц спины на поясницу.</li>
-                  <li><span class="err-i">!</span>Тяга только руками — без включения спины это упражнение для рук, не спины.</li>
-                  <li><span class="err-i">!</span>Раскачка корпусом вперёд-назад — инерция убивает эффективность.</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 4 Молотки -->
-        <div class="ex-card fu">
-          <div class="ex-head">
-            <div class="ex-num">4</div>
-            <div class="ex-title-wrap">
-              <div class="ex-name">Молотки</div>
-              <span class="mtag mt-bic">Брахиалис · Бицепс (длинная гол.)</span>
-            </div>
-          </div>
-          <div class="ex-stats">
-            <div class="sp"><div class="sv">3</div><div class="sl">Подх.</div></div>
-            <div class="sp"><div class="sv">10–12</div><div class="sl">Повт.</div></div>
-            <div class="sp"><div class="sv">14 кг</div><div class="sl">Вес</div></div>
-          </div>
-          <div class="ex-foot">
-            <div class="rest-pill">⏱ 60–90 с</div>
-            <button class="timer-btn" onclick="startTimer(this,60)">▶ Таймер</button>
-          </div>
-          <div class="ex-acc">
-            <div class="ac">
-              <button class="ac-btn" onclick="toggleAc(this)">
-                <span class="ac-ic">📋</span> Техника выполнения
-                <span class="ac-arr">▼</span>
-              </button>
-              <div class="ac-body">
-                <ul class="tech-list">
-                  <li><span class="t-n">1</span>Стоя, нейтральный хват (большой палец вверх), гантели по бокам бёдер.</li>
-                  <li><span class="t-n">2</span>Локти прижаты к туловищу и не двигаются в течение всего движения.</li>
-                  <li><span class="t-n">3</span>Поднимайте поочерёдно или одновременно — до полного сокращения с небольшой паузой.</li>
-                  <li><span class="t-n">4</span>Контролируемо опускайте до полного разгибания — не бросайте.</li>
-                </ul>
-              </div>
-            </div>
-            <div class="ac">
-              <button class="ac-btn" onclick="toggleAc(this)">
-                <span class="ac-ic">⚠️</span> Частые ошибки
-                <span class="ac-arr">▼</span>
-              </button>
-              <div class="ac-body">
-                <ul class="err-list">
-                  <li><span class="err-i">!</span>Раскачивание корпусом — типичная ошибка при подборе слишком тяжёлого веса.</li>
-                  <li><span class="err-i">!</span>Разворот запястья в супинацию — это превращает молотки в обычный подъём на бицепс.</li>
-                  <li><span class="err-i">!</span>Неполная амплитуда — брахиалис лучше всего работает при полном диапазоне движения.</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 5 Подъём EZ -->
-        <div class="ex-card fu">
-          <div class="ex-head">
-            <div class="ex-num">5</div>
-            <div class="ex-title-wrap">
-              <div class="ex-name">Подъём EZ-штанги на бицепс</div>
-              <span class="mtag mt-bic">Бицепс (обе головки)</span>
-            </div>
-          </div>
-          <div class="ex-stats">
-            <div class="sp"><div class="sv">3</div><div class="sl">Подх.</div></div>
-            <div class="sp"><div class="sv">8–10</div><div class="sl">Повт.</div></div>
-            <div class="sp"><div class="sv">+15 кг</div><div class="sl">Вес</div></div>
-          </div>
-          <div class="ex-foot">
-            <div class="rest-pill">⏱ 90–120 с</div>
-            <button class="timer-btn" onclick="startTimer(this,90)">▶ Таймер</button>
-          </div>
-          <div class="ex-acc">
-            <div class="ac">
-              <button class="ac-btn" onclick="toggleAc(this)">
-                <span class="ac-ic">📋</span> Техника выполнения
-                <span class="ac-arr">▼</span>
-              </button>
-              <div class="ac-body">
-                <ul class="tech-list">
-                  <li><span class="t-n">1</span>Стоя, хват EZ-грифа на изгибах (снижает нагрузку на запястья). Локти у туловища.</li>
-                  <li><span class="t-n">2</span>Поднимайте гриф до полного сокращения бицепса — не отводите локти вперёд.</li>
-                  <li><span class="t-n">3</span>Пауза в верхней точке — 1 секунда максимального напряжения.</li>
-                  <li><span class="t-n">4</span>Медленно опускайте — 2–3 секунды вниз, не бросайте гриф.</li>
-                </ul>
-              </div>
-            </div>
-            <div class="ac">
-              <button class="ac-btn" onclick="toggleAc(this)">
-                <span class="ac-ic">⚠️</span> Частые ошибки
-                <span class="ac-arr">▼</span>
-              </button>
-              <div class="ac-body">
-                <ul class="err-list">
-                  <li><span class="err-i">!</span>Раскачивание корпусом назад при подъёме — берите меньший вес.</li>
-                  <li><span class="err-i">!</span>Выдвижение локтей вперёд в верхней точке — снимает нагрузку с бицепса.</li>
-                  <li><span class="err-i">!</span>Бросание грифа при опускании — эксцентрическая фаза равноценна концентрической.</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 6 Гиперэкстензия -->
-        <div class="ex-card fu">
-          <div class="ex-head">
-            <div class="ex-num">6</div>
-            <div class="ex-title-wrap">
-              <div class="ex-name">Гиперэкстензия</div>
-              <span class="mtag mt-low">Разгибатели спины · Ягодицы</span>
-            </div>
-          </div>
-          <div class="ex-stats">
-            <div class="sp"><div class="sv">3</div><div class="sl">Подх.</div></div>
-            <div class="sp"><div class="sv">12–15</div><div class="sl">Повт.</div></div>
-            <div class="sp"><div class="sv">+5 кг</div><div class="sl">Вес</div></div>
-          </div>
-          <div class="ex-foot">
-            <div class="rest-pill">⏱ 60–90 с</div>
-            <button class="timer-btn" onclick="startTimer(this,60)">▶ Таймер</button>
-          </div>
-          <div class="ex-acc">
-            <div class="ac">
-              <button class="ac-btn" onclick="toggleAc(this)">
-                <span class="ac-ic">📋</span> Техника выполнения
-                <span class="ac-arr">▼</span>
-              </button>
-              <div class="ac-body">
-                <ul class="tech-list">
-                  <li><span class="t-n">1</span>Зафиксируйте лодыжки в упоре. Тазобедренный сгиб — на уровне края подушки.</li>
-                  <li><span class="t-n">2</span>Руки за голову или удерживайте вес у груди. Начните из нижнего положения (наклон ~45°).</li>
-                  <li><span class="t-n">3</span>Поднимайте корпус до прямой линии тела — не выше, не переразгибайтесь в пояснице.</li>
-                  <li><span class="t-n">4</span>Медленно опускайтесь обратно — 2–3 секунды вниз.</li>
-                </ul>
-              </div>
-            </div>
-            <div class="ac">
-              <button class="ac-btn" onclick="toggleAc(this)">
-                <span class="ac-ic">⚠️</span> Частые ошибки
-                <span class="ac-arr">▼</span>
-              </button>
-              <div class="ac-body">
-                <ul class="err-list">
-                  <li><span class="err-i">!</span>Переразгибание поясницы в верхней точке — риск компрессии позвонков.</li>
-                  <li><span class="err-i">!</span>Рывковые быстрые движения — убирают контроль и увеличивают риск травмы.</li>
-                  <li><span class="err-i">!</span>Округление спины при опускании — держите нейтральное положение позвоночника.</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div><!-- /ex-grid -->
-    </div><!-- /tab-sat -->
-
-  </div><!-- /section -->
-</section><!-- /training -->
-
-<!-- ═══ ПРОГРЕСС ═══ -->
-<section id="progress">
-  <div class="section">
-    <div class="sec-head fu">
-      <div class="sec-lbl">Трекер</div>
-      <h2 class="sec-title">Мой прогресс</h2>
-      <p class="sec-desc">Записывай рабочие веса после каждой тренировки — данные сохраняются в браузере.</p>
-    </div>
-
-    <div class="prog-grid" id="progGrid">
-      <!-- generated by JS -->
-    </div>
-  </div>
-</section>
-
-<!-- ═══ ДНЕВНИК ═══ -->
-<section id="log">
-  <div class="section">
-    <div class="log-top fu">
-      <div>
-        <div class="sec-lbl">Дневник</div>
-        <h2 class="sec-title">Тренировочный журнал</h2>
-      </div>
-      <button class="log-add-btn" onclick="openModal()">+ Добавить тренировку</button>
-    </div>
-    <div class="log-list" id="logList">
-      <!-- generated by JS -->
-    </div>
-  </div>
-</section>
-
-</main>
-
-<!-- modal -->
-<div class="modal-bg" id="modalBg">
+<!-- MODAL -->
+<div class="overlay" id="overlay" onclick="overlayClick(event)">
   <div class="modal">
-    <h3>Записать тренировку</h3>
-    <div class="fr">
-      <label>Дата</label>
-      <input type="date" id="mDate">
+    <div class="modal-hdr">
+      <h2 class="modal-title" id="modalTitle">Новое дело</h2>
+      <button class="modal-close" onclick="closeModal()">✕</button>
     </div>
-    <div class="fr">
-      <label>Тип тренировки</label>
-      <select id="mType">
-        <option value="Плечи + Трицепс">Понедельник — Плечи + Трицепс</option>
-        <option value="Кардио (HIIT)">Среда — Кардио (HIIT)</option>
-        <option value="Спина + Бицепс">Суббота — Спина + Бицепс</option>
-      </select>
+    <div class="fg">
+      <label>Название *</label>
+      <input class="fi" id="fTitle" placeholder="Название дела…">
     </div>
-    <div class="fr">
-      <label>Заметки (необязательно)</label>
-      <textarea id="mNote" placeholder="Как прошла тренировка? Что дал результат?"></textarea>
+    <div class="fg row">
+      <div class="fg"><label>Дата</label><input class="fi" id="fDate" type="date"></div>
+      <div class="fg"><label>Начало</label><input class="fi" id="fStart" type="time"></div>
+      <div class="fg"><label>Конец</label><input class="fi" id="fEnd" type="time"></div>
     </div>
-    <div class="modal-btns">
-      <button class="btn-prim" onclick="saveLog()">Сохранить</button>
-      <button class="btn-sec" onclick="closeModal()">Отмена</button>
+    <div class="fg">
+      <label>Описание</label>
+      <textarea class="fi" id="fDesc" placeholder="Описание (необязательно)…"></textarea>
+    </div>
+    <div class="fg">
+      <label>Статус</label>
+      <div class="status-btns">
+        <button type="button" class="s-btn active" data-s="pending"     onclick="pickStatus(this)">Ожидает</button>
+        <button type="button" class="s-btn"        data-s="in-progress" onclick="pickStatus(this)">В работе</button>
+        <button type="button" class="s-btn"        data-s="done"        onclick="pickStatus(this)">Выполнено</button>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <div class="modal-footer-left">
+        <button type="button" class="btn btn-ghost btn-sm" id="btnDelete" onclick="deleteEditing()" style="display:none;color:var(--err)">Удалить</button>
+      </div>
+      <div class="modal-footer-right">
+        <button type="button" class="btn btn-ghost btn-sm" onclick="closeModal()">Отмена</button>
+        <button type="button" class="btn btn-primary btn-sm" onclick="saveTask()">Сохранить</button>
+      </div>
     </div>
   </div>
 </div>
 
-<footer>
-  Личный фитнес-центр &nbsp;·&nbsp; <span>МОЙ ЗАЛ</span> &nbsp;·&nbsp; Данные хранятся локально в браузере
-</footer>
+<!-- CONTEXT MENU -->
+<div class="ctx-menu" id="ctxMenu">
+  <button class="ctx-item" onclick="ctxAction('edit')"><span class="ctx-icon">✎</span> Редактировать</button>
+  <div class="ctx-sep"></div>
+  <div class="ctx-sub-label">Статус</div>
+  <button class="ctx-item" data-s="pending"     onclick="ctxAction('status','pending')"><span class="ctx-icon">○</span> Ожидает <span class="ctx-check">✓</span></button>
+  <button class="ctx-item" data-s="in-progress" onclick="ctxAction('status','in-progress')"><span class="ctx-icon">◑</span> В работе <span class="ctx-check">✓</span></button>
+  <button class="ctx-item" data-s="done"        onclick="ctxAction('status','done')"><span class="ctx-icon">●</span> Выполнено <span class="ctx-check">✓</span></button>
+  <div class="ctx-sep"></div>
+  <button class="ctx-item danger" onclick="ctxAction('delete')"><span class="ctx-icon">✕</span> Удалить</button>
+</div>
+
+<div class="toast" id="toast"></div>
 
 <script>
-/* ─── DATA ─── */
-const PROG_EXERCISES = [
-  { id: 'press_sit',   name: 'Жим гантелей сидя',        unit: 'кг/рука',   day: 'Пн' },
-  { id: 'lateral',     name: 'Разведение в стороны',      unit: 'кг/рука',   day: 'Пн' },
-  { id: 'face_pull',   name: 'Face pull',                 unit: 'кг',        day: 'Пн' },
-  { id: 'fr_press',    name: 'Французский жим EZ',        unit: 'кг доп.',   day: 'Пн' },
-  { id: 'tri_bar',     name: 'Трицепс блок (палка)',      unit: 'кг',        day: 'Пн' },
-  { id: 'tri_rev',     name: 'Трицепс обр. хват',         unit: 'кг',        day: 'Пн' },
-  { id: 'pullup',      name: 'Подтягивания',              unit: 'повт.',     day: 'Сб' },
-  { id: 'lat_pull',    name: 'Вертикальная тяга',         unit: 'кг',        day: 'Сб' },
-  { id: 'row',         name: 'Горизонтальная тяга',       unit: 'кг',        day: 'Сб' },
-  { id: 'hammer',      name: 'Молотки',                   unit: 'кг/рука',   day: 'Сб' },
-  { id: 'ez_curl',     name: 'Подъём EZ на бицепс',       unit: 'кг доп.',   day: 'Сб' },
-  { id: 'hyper',       name: 'Гиперэкстензия',            unit: 'кг доп.',   day: 'Сб' },
-];
+// ── SUPABASE ───────────────────────────────────────────────────────────────
+const sb = supabase.createClient(
+  'https://pkvexlivljddbggqlmjj.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBrdmV4bGl2bGpkZGJnZ3FsbWpqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA5OTMzOTIsImV4cCI6MjA5NjU2OTM5Mn0.1haUHwSbbxdyeKCGMh0jffe1IUffyGtK7-BRfon7IWo'
+);
 
-/* ─── PROGRESS CARDS ─── */
-function getHistory(id) {
-  try { return JSON.parse(localStorage.getItem('gym_prog_' + id) || '[]'); }
-  catch(e) { return []; }
+// Column name mapping: DB uses snake_case, frontend uses camelCase
+function fromDb(row){
+  return {
+    id:          row.id,
+    title:       row.title,
+    date:        row.date        || null,
+    startTime:   row.start_time  || null,
+    endTime:     row.end_time    || null,
+    description: row.description || '',
+    status:      row.status      || 'pending'
+  };
 }
-function saveHistory(id, arr) {
-  localStorage.setItem('gym_prog_' + id, JSON.stringify(arr));
+function toDb(task){
+  return {
+    title:       task.title,
+    date:        task.date       || null,
+    start_time:  task.startTime  || null,
+    end_time:    task.endTime    || null,
+    description: task.description || '',
+    status:      task.status     || 'pending'
+  };
 }
+function sbErr(e){ return e?.message || 'Ошибка сервера' }
 
-function trendIcon(arr) {
-  if (arr.length < 2) return { cls: 'flat', txt: '—' };
-  const a = parseFloat(arr[arr.length - 2].v);
-  const b = parseFloat(arr[arr.length - 1].v);
-  if (b > a) return { cls: 'up',   txt: '▲ +' + (b - a).toFixed(1) };
-  if (b < a) return { cls: 'down', txt: '▼ −' + (a - b).toFixed(1) };
-  return { cls: 'flat', txt: '→ без изм.' };
-}
+// ── CONSTANTS ──────────────────────────────────────────────────────────────
+const HH=52, DS=0, DE=24, SNAP=15, TOTAL_H=24;
 
-function buildProgCards() {
-  const grid = document.getElementById('progGrid');
-  grid.innerHTML = PROG_EXERCISES.map(ex => {
-    const hist = getHistory(ex.id);
-    const tr = trendIcon(hist);
-    const lastVal = hist.length ? hist[hist.length - 1].v : '';
-    const histHtml = hist.length
-      ? [...hist].reverse().slice(0,6).map((h, ri) => {
-          const idx = hist.length - 1 - ri;
-          return `<div class="pe"><span class="pe-date">${h.d}</span><span class="pe-val">${h.v} ${ex.unit}</span><button class="pe-del" onclick="deleteProg('${ex.id}',${idx})" title="Удалить">✕</button></div>`;
-        }).join('')
-      : `<div class="prog-empty">Нет записей</div>`;
-    return `
-      <div class="prog-card fu">
-        <div class="prog-hd">
-          <div class="prog-name">${ex.name} <span style="color:var(--dim);font-size:.7rem;font-family:'Inter'">${ex.day}</span></div>
-          <div class="prog-trend ${tr.cls}">${tr.txt}</div>
-        </div>
-        <div class="prog-inputs">
-          <div class="pf">
-            <label>${ex.unit}</label>
-            <input type="number" id="pi_${ex.id}" placeholder="${lastVal || '0'}" step="0.5" min="0">
-          </div>
-        </div>
-        <button class="prog-save" onclick="saveProg('${ex.id}','${ex.unit}')">Записать</button>
-        <div class="prog-hist" id="ph_${ex.id}">${histHtml}</div>
-      </div>`;
-  }).join('');
-}
+// ── STATE ──────────────────────────────────────────────────────────────────
+let tasks=[], editId=null, selStatus='pending', weekDays=[];
+let currentTab='week', drag=null, ghostEl=null, rz=null, ctxTaskId=null;
+let currentUser=null;
 
-function deleteProg(id, index) {
-  const hist = getHistory(id);
-  hist.splice(index, 1);
-  saveHistory(id, hist);
-  buildProgCards();
-  applyFu();
+// ── UTILS ──────────────────────────────────────────────────────────────────
+function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2) }
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;') }
+function todayStr(){ return ymd(new Date()) }
+function ymd(d){ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}` }
+function parseDate(s){ const[y,m,d]=s.split('-').map(Number); return new Date(y,m-1,d) }
+function t2m(t){ if(!t) return 0; const[h,m]=t.split(':').map(Number); return h*60+m }
+function m2t(m){ const h=Math.floor(m/60),mm=m%60; return `${String(h).padStart(2,'0')}:${String(mm).padStart(2,'0')}` }
+function fmt(t){ if(!t) return ''; const[h,m]=t.split(':').map(Number); return `${h}:${String(m).padStart(2,'0')}` }
+function snapM(m){ return Math.round(m/SNAP)*SNAP }
+function clamp(v,a,b){ return Math.max(a,Math.min(b,v)) }
+
+const DN=['вс','пн','вт','ср','чт','пт','сб'];
+const MN=['янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя','дек'];
+const STATUS_LABEL={pending:'Ожидает','in-progress':'В работе',done:'Выполнено'};
+
+// ── THEME ──────────────────────────────────────────────────────────────────
+function toggleTheme(){
+  const next=document.documentElement.dataset.theme==='light'?'dark':'light';
+  document.documentElement.dataset.theme=next;
+  localStorage.setItem('tm_theme',next);
+  document.getElementById('themeBtn').textContent=next==='light'?'🌙':'☀️';
+}
+function applyTheme(){
+  const t=localStorage.getItem('tm_theme')||'dark';
+  document.documentElement.dataset.theme=t;
+  document.getElementById('themeBtn').textContent=t==='light'?'🌙':'☀️';
 }
 
-function saveProg(id, unit) {
-  const inp = document.getElementById('pi_' + id);
-  const val = inp.value.trim();
-  if (!val) return;
-  const hist = getHistory(id);
-  const today = new Date().toLocaleDateString('ru-RU', { day:'numeric', month:'short' });
-  hist.push({ d: today, v: val });
-  saveHistory(id, hist);
-  inp.value = '';
-  buildProgCards();
-  applyFu();
+// ── AUTH ───────────────────────────────────────────────────────────────────
+function toEmail(u){ return `${u.toLowerCase().replace(/[^a-z0-9]/g,'')}@tm.app` }
+
+function showAuth(){
+  document.getElementById('authScreen').style.display='flex';
+  document.getElementById('app').style.display='none';
+}
+function showApp(){
+  document.getElementById('authScreen').style.display='none';
+  document.getElementById('app').style.display='flex';
+  document.getElementById('tabAdmin').style.display=currentUser?.isAdmin?'':'none';
+  document.getElementById('ucAvatar').textContent=(currentUser?.username||'?')[0].toUpperCase();
+  document.getElementById('ucName').textContent=currentUser?.username||'';
+}
+function switchAuthTab(tab){
+  const isLogin=tab==='login';
+  document.getElementById('aTabLogin').classList.toggle('active',isLogin);
+  document.getElementById('aTabRegister').classList.toggle('active',!isLogin);
+  document.getElementById('aConfirmFg').style.display=isLogin?'none':'';
+  document.getElementById('authSubmitBtn').textContent=isLogin?'Войти':'Создать аккаунт';
+  document.getElementById('authError').style.display='none';
 }
 
-/* ─── WORKOUT LOG ─── */
-function getLogs() {
-  try { return JSON.parse(localStorage.getItem('gym_log') || '[]'); }
-  catch(e) { return []; }
-}
-function saveLogs(arr) { localStorage.setItem('gym_log', JSON.stringify(arr)); }
+async function submitAuth(){
+  const username=document.getElementById('aUsername').value.trim();
+  const password=document.getElementById('aPassword').value;
+  const isLogin=document.getElementById('aTabLogin').classList.contains('active');
+  const errEl=document.getElementById('authError');
+  errEl.style.display='none';
 
-function renderLog() {
-  const logs = getLogs();
-  const el = document.getElementById('logList');
-  if (!logs.length) {
-    el.innerHTML = `<div class="log-empty"><span class="log-e-ico">📓</span>Журнал пуст — нажми «Добавить тренировку»</div>`;
+  if(!username||!password){ errEl.textContent='Заполните все поля'; errEl.style.display=''; return; }
+  if(username.length<3){ errEl.textContent='Логин: минимум 3 символа'; errEl.style.display=''; return; }
+  if(password.length<6){ errEl.textContent='Пароль: минимум 6 символов'; errEl.style.display=''; return; }
+  if(!isLogin){
+    const c=document.getElementById('aConfirm').value;
+    if(password!==c){ errEl.textContent='Пароли не совпадают'; errEl.style.display=''; return; }
+  }
+
+  const btn=document.getElementById('authSubmitBtn');
+  btn.disabled=true; btn.textContent='…';
+
+  try {
+    const email=toEmail(username);
+
+    if(isLogin){
+      const {data,error}=await sb.auth.signInWithPassword({email,password});
+      if(error) throw new Error('Неверный логин или пароль');
+      await loadUserAndTasks(data.user);
+
+    } else {
+      // Check username not taken
+      const {data:existing}=await sb.from('profiles').select('id').eq('username',username).maybeSingle();
+      if(existing) throw new Error('Этот логин уже занят');
+
+      // Create auth user
+      const {data,error}=await sb.auth.signUp({email,password});
+      if(error){
+        if(error.message.includes('already registered')) throw new Error('Этот логин уже занят');
+        throw new Error(error.message);
+      }
+
+      // Sign in to get session
+      const {data:loginData,error:loginErr}=await sb.auth.signInWithPassword({email,password});
+      if(loginErr) throw new Error('Аккаунт создан — войди вручную');
+
+      // Count profiles to decide is_admin (first user = admin)
+      const {count}=await sb.from('profiles').select('*',{count:'exact',head:true});
+      const isFirstUser=(count===0||count===null||count==='0');
+      const {error:profErr}=await sb.from('profiles').insert({
+        id:loginData.user.id, username, is_admin: isFirstUser
+      });
+      if(profErr) throw new Error('Ошибка создания профиля: '+profErr.message);
+
+      await loadUserAndTasks(loginData.user);
+    }
+
+    showApp(); render();
+    setTimeout(()=>{
+      const now=new Date();
+      document.getElementById('calScroll').scrollTop=Math.max(0,(now.getHours()*60+now.getMinutes())/60*HH-100);
+    },150);
+  } catch(e){
+    errEl.textContent=e.message; errEl.style.display='';
+  } finally {
+    btn.disabled=false;
+    btn.textContent=document.getElementById('aTabLogin').classList.contains('active')?'Войти':'Создать аккаунт';
+  }
+}
+
+async function loadUserAndTasks(user){
+  const [{data:profile},{data:taskRows}]=await Promise.all([
+    sb.from('profiles').select('*').eq('id',user.id).single(),
+    sb.from('tasks').select('*')
+  ]);
+  currentUser={ id:user.id, username:profile.username, isAdmin:profile.is_admin };
+  tasks=(taskRows||[]).map(fromDb);
+}
+
+async function logout(){
+  await sb.auth.signOut();
+  currentUser=null; tasks=[]; currentTab='week';
+  showAuth();
+  document.getElementById('aUsername').value='';
+  document.getElementById('aPassword').value='';
+  document.getElementById('aConfirm').value='';
+  document.getElementById('authError').style.display='none';
+  switchAuthTab('login');
+}
+
+// ── WEEK DAYS ──────────────────────────────────────────────────────────────
+function getWeekDays(){
+  const arr=[],base=new Date(); base.setHours(0,0,0,0);
+  for(let i=0;i<7;i++){const d=new Date(base);d.setDate(d.getDate()+i);arr.push(d)}
+  return arr;
+}
+
+// ── OVERLAP ────────────────────────────────────────────────────────────────
+function checkOverlap(taskId,date,startT,endT){
+  const s=t2m(startT),e=endT?t2m(endT):s+60;
+  for(const t of tasks){
+    if(t.id===taskId||t.date!==date||!t.startTime) continue;
+    const ts=t2m(t.startTime),te=t.endTime?t2m(t.endTime):ts+60;
+    if(s<te&&e>ts) return true;
+  }
+  return false;
+}
+
+// ── TAB SWITCH ─────────────────────────────────────────────────────────────
+function switchTab(tab){
+  currentTab=tab;
+  document.getElementById('tabWeek').classList.toggle('active',tab==='week');
+  document.getElementById('tabAll').classList.toggle('active',tab==='all');
+  document.getElementById('tabAdmin').classList.toggle('active',tab==='admin');
+  document.getElementById('weekView').style.display=tab==='week'?'flex':'none';
+  document.getElementById('allView').classList.toggle('active',tab==='all');
+  document.getElementById('adminView').classList.toggle('active',tab==='admin');
+  if(tab==='all') renderAllTasks();
+  if(tab==='admin') renderAdmin();
+}
+
+// ── RENDER ─────────────────────────────────────────────────────────────────
+function render(){
+  weekDays=getWeekDays();
+  renderHeaders(); renderAllday(); renderTimeLabels(); renderDayCols();
+  renderFuture(); updateNowLine();
+  if(currentTab==='all') renderAllTasks();
+}
+function renderHeaders(){
+  const today=todayStr(),c=document.getElementById('dayHeaders');c.innerHTML='';
+  weekDays.forEach((d,i)=>{
+    const ds=ymd(d),isTd=ds===today;
+    const el=document.createElement('div');
+    el.className='day-col-hdr'+(isTd?' today':'');
+    el.dataset.i=i;el.dataset.date=ds;
+    el.innerHTML=`<div class="dh-name">${DN[d.getDay()]}</div><div class="dh-num">${d.getDate()}</div><div class="dh-month">${isTd?'сегодня':MN[d.getMonth()]}</div>`;
+    el.onclick=()=>openModal(ds,null,null);
+    c.appendChild(el);
+  });
+  const now=new Date();
+  document.getElementById('hdrToday').textContent=`${now.getDate()} ${MN[now.getMonth()]} ${now.getFullYear()}`;
+}
+function renderAllday(){
+  const c=document.getElementById('alldayCells');c.innerHTML='';
+  weekDays.forEach(d=>{
+    const ds=ymd(d),cell=document.createElement('div');
+    cell.className='allday-cell';cell.dataset.date=ds;
+    tasks.filter(t=>t.date===ds&&!t.startTime).forEach(t=>{
+      const chip=document.createElement('div');
+      chip.className='allday-chip s-'+t.status;
+      chip.title=t.title;chip.textContent=t.title;
+      chip.onclick=()=>openEditModal(t.id);
+      chip.addEventListener('contextmenu',e=>showCtxMenu(e,t.id));
+      cell.appendChild(chip);
+    });
+    c.appendChild(cell);
+  });
+}
+function renderTimeLabels(){
+  const c=document.getElementById('timeLabels');c.innerHTML='';
+  for(let h=DS;h<DE;h++){
+    const el=document.createElement('div');
+    el.className='time-lbl';el.style.height=HH+'px';el.textContent=`${h}:00`;
+    c.appendChild(el);
+  }
+}
+function renderDayCols(){
+  const today=todayStr(),c=document.getElementById('dayCols');c.innerHTML='';
+  weekDays.forEach((d,i)=>{
+    const ds=ymd(d),isTd=ds===today;
+    const col=document.createElement('div');
+    col.className='day-col'+(isTd?' today':'');
+    col.dataset.i=i;col.dataset.date=ds;col.style.height=(TOTAL_H*HH)+'px';
+    for(let h=DS;h<DE;h++){
+      const slot=document.createElement('div');
+      slot.className='hour-slot';
+      slot.style.cssText=`position:absolute;top:${(h-DS)*HH}px;left:0;right:0;height:${HH}px`;
+      slot.onclick=e=>onSlotClick(e,ds,h);
+      col.appendChild(slot);
+    }
+    const di=document.createElement('div');di.className='drop-ind';di.id='di-'+i;
+    col.appendChild(di);
+    tasks.filter(t=>t.date===ds&&t.startTime).forEach(t=>col.appendChild(makeTaskBlock(t)));
+    c.appendChild(col);
+  });
+}
+function makeTaskBlock(task){
+  const sm=t2m(task.startTime),em=task.endTime?t2m(task.endTime):sm+60;
+  const b=document.createElement('div');
+  b.className='task-block s-'+task.status;
+  b.id='tb-'+task.id;b.dataset.id=task.id;
+  b.style.top=((sm-DS*60)/60*HH)+'px';b.style.height=Math.max(22,(em-sm)/60*HH)+'px';
+  const timeStr=fmt(task.startTime)+(task.endTime?' – '+fmt(task.endTime):'');
+  const badge=task.status!=='pending'?`<div class="tb-badge s-${task.status}">${STATUS_LABEL[task.status]}</div>`:'';
+  b.innerHTML=`<div class="tb-title">${esc(task.title)}</div><div class="tb-time">${timeStr}</div>${badge}<div class="resize-handle" data-id="${task.id}"></div>`;
+  b.addEventListener('mousedown',e=>onDragStart(e,task.id));
+  b.addEventListener('contextmenu',e=>showCtxMenu(e,task.id));
+  b.querySelector('.resize-handle').addEventListener('mousedown',e=>onResizeStart(e,task.id));
+  return b;
+}
+function renderFuture(){
+  const weekEnd=new Date();weekEnd.setHours(0,0,0,0);weekEnd.setDate(weekEnd.getDate()+7);
+  const ft=tasks.filter(t=>t.date&&parseDate(t.date)>=weekEnd)
+    .sort((a,b)=>a.date.localeCompare(b.date)||(a.startTime||'').localeCompare(b.startTime||''));
+  document.getElementById('fpCount').textContent=ft.length;
+  const body=document.getElementById('fpBody');body.innerHTML='';
+  ft.forEach(t=>{
+    const d=parseDate(t.date),item=document.createElement('div');item.className='fp-item';
+    item.innerHTML=`<div class="fp-date">${d.getDate()} ${MN[d.getMonth()]}, ${DN[d.getDay()]}</div><div class="fp-name">${esc(t.title)}</div>${t.startTime?`<div class="fp-time">${fmt(t.startTime)}${t.endTime?' – '+fmt(t.endTime):''}</div>`:''}<span class="fp-status s-${t.status}">${STATUS_LABEL[t.status]}</span>`;
+    item.onclick=()=>openEditModal(t.id);
+    item.addEventListener('contextmenu',e=>showCtxMenu(e,t.id));
+    body.appendChild(item);
+  });
+  document.getElementById('futurePanel').style.display=ft.length===0?'none':'';
+}
+function toggleFuture(){ document.getElementById('futurePanel').classList.toggle('collapsed') }
+
+// ── ALL TASKS VIEW ─────────────────────────────────────────────────────────
+function renderAllTasks(){
+  const c=document.getElementById('allView');c.innerHTML='';
+  if(!tasks.length){ c.innerHTML='<div class="all-empty">Нет ни одного дела.<br>Нажмите «+ Новое дело», чтобы добавить.</div>'; return; }
+  const noDate=tasks.filter(t=>!t.date).sort((a,b)=>a.title.localeCompare(b.title));
+  const withDate=tasks.filter(t=>t.date).sort((a,b)=>a.date.localeCompare(b.date)||(a.startTime||'').localeCompare(b.startTime||''));
+  if(noDate.length){
+    const sec=document.createElement('div');sec.className='all-section';
+    const hdr=document.createElement('div');hdr.className='all-section-hdr no-date-hdr';hdr.textContent='Без даты';
+    sec.appendChild(hdr);noDate.forEach(t=>sec.appendChild(makeAllRow(t)));c.appendChild(sec);
+  }
+  const byDate={};withDate.forEach(t=>{if(!byDate[t.date])byDate[t.date]=[];byDate[t.date].push(t)});
+  const today=todayStr(),weekEnd=new Date();weekEnd.setHours(0,0,0,0);weekEnd.setDate(weekEnd.getDate()+7);
+  Object.keys(byDate).sort().forEach(ds=>{
+    const d=parseDate(ds),isPast=parseDate(ds)<new Date(today),isToday=ds===today,isFuture=parseDate(ds)>=weekEnd;
+    let label=`${d.getDate()} ${MN[d.getMonth()]} ${d.getFullYear()}, ${DN[d.getDay()]}`;
+    if(isToday) label+=' — сегодня'; else if(isPast) label+=' — прошедшее'; else if(isFuture) label+=' — будущее';
+    const sec=document.createElement('div');sec.className='all-section';
+    const hdr=document.createElement('div');hdr.className='all-section-hdr';hdr.textContent=label;
+    if(isPast&&!isToday) hdr.style.opacity='.45';
+    sec.appendChild(hdr);byDate[ds].forEach(t=>sec.appendChild(makeAllRow(t)));c.appendChild(sec);
+  });
+}
+function makeAllRow(task){
+  const card=document.createElement('div');card.className='all-card s-'+task.status;
+  const d=task.date?parseDate(task.date):null;
+  const metaParts=[];
+  if(d) metaParts.push(`${d.getDate()} ${MN[d.getMonth()]} ${d.getFullYear()} · ${DN[d.getDay()]}`);
+  if(task.startTime) metaParts.push(fmt(task.startTime)+(task.endTime?' – '+fmt(task.endTime):''));
+  else if(task.date) metaParts.push('Весь день');
+  const meta=metaParts.join(' · ');
+  card.innerHTML=`
+    <div class="ac-body">
+      <div class="ac-title">${esc(task.title)}</div>
+      ${meta?`<div class="ac-meta">${meta}</div>`:''}
+      ${task.description?`<div class="ac-desc">${esc(task.description)}</div>`:''}
+    </div>
+    <span class="ac-status s-${task.status}">${STATUS_LABEL[task.status]}</span>`;
+  card.onclick=()=>openEditModal(task.id);
+  card.addEventListener('contextmenu',e=>showCtxMenu(e,task.id));
+  return card;
+}
+
+// ── ADMIN VIEW ─────────────────────────────────────────────────────────────
+async function renderAdmin(){
+  const c=document.getElementById('adminView');
+  c.innerHTML='<div class="admin-loading">Загрузка…</div>';
+  const {data:users,error}=await sb.rpc('admin_get_users');
+  if(error){ c.innerHTML=`<div class="admin-loading" style="color:var(--err)">Ошибка: ${esc(sbErr(error))}</div>`; return; }
+  c.innerHTML='';
+  const wrap=document.createElement('div');wrap.className='admin-wrap';
+  const hdr=document.createElement('div');hdr.className='admin-hdr';
+  hdr.innerHTML=`<span class="admin-title">Пользователи</span><span class="admin-sub">${plural(users.length,'аккаунт','аккаунта','аккаунтов')}</span>`;
+  wrap.appendChild(hdr);
+  users.forEach(u=>{
+    const isMe=u.id===currentUser?.id;
+    const card=document.createElement('div');card.className='user-card';card.id='uc-'+u.id;
+    const joined=new Date(u.created_at);
+    card.innerHTML=`
+      <div class="u-avatar${u.is_admin?' is-admin':''}">${u.username[0].toUpperCase()}</div>
+      <div class="u-info">
+        <div class="u-name">${esc(u.username)}${u.is_admin?'<span class="u-badge admin">Админ</span>':''}${isMe?'<span class="u-badge you">Вы</span>':''}</div>
+        <div class="u-meta">Зарегистрирован ${joined.getDate()} ${MN[joined.getMonth()]} ${joined.getFullYear()}</div>
+      </div>
+      <div class="u-tasks">${plural(u.task_count,'дело','дела','дел')}</div>`;
+    if(!isMe&&!u.is_admin){
+      const del=document.createElement('button');del.className='btn btn-danger btn-sm';del.textContent='Удалить';
+      del.onclick=()=>deleteUser(u.id,u.username);
+      card.appendChild(del);
+    }
+    wrap.appendChild(card);
+  });
+  c.appendChild(wrap);
+}
+async function deleteUser(userId,username){
+  const card=document.getElementById('uc-'+userId);
+  if(card){card.style.opacity='.4';card.style.pointerEvents='none';}
+  const {error}=await sb.rpc('admin_delete_user',{target_id:userId});
+  if(error){
+    if(card){card.style.opacity='';card.style.pointerEvents='';}
+    showToast(sbErr(error),'err');
+  } else {
+    showToast(`Пользователь «${username}» удалён`);
+    renderAdmin();
+  }
+}
+function plural(n,one,few,many){
+  if(n%10===1&&n%100!==11) return `${n} ${one}`;
+  if(n%10>=2&&n%10<=4&&(n%100<10||n%100>=20)) return `${n} ${few}`;
+  return `${n} ${many}`;
+}
+
+// ── CONTEXT MENU ───────────────────────────────────────────────────────────
+function showCtxMenu(e,id){
+  e.preventDefault();e.stopPropagation();
+  ctxTaskId=id;
+  const task=tasks.find(t=>t.id===id);if(!task) return;
+  document.querySelectorAll('.ctx-menu [data-s]').forEach(btn=>btn.classList.toggle('checked',btn.dataset.s===task.status));
+  const menu=document.getElementById('ctxMenu');
+  menu.classList.add('open');menu.style.left=e.clientX+'px';menu.style.top=e.clientY+'px';
+  requestAnimationFrame(()=>{
+    const r=menu.getBoundingClientRect();
+    if(r.right>window.innerWidth) menu.style.left=(e.clientX-r.width)+'px';
+    if(r.bottom>window.innerHeight) menu.style.top=(e.clientY-r.height)+'px';
+  });
+}
+function ctxAction(action,val){
+  const id=ctxTaskId; closeCtxMenu(); if(!id) return;
+  if(action==='edit'){ openEditModal(id); return; }
+  if(action==='delete'){
+    const saved=tasks.slice(); tasks=tasks.filter(t=>t.id!==id); render();
+    sb.from('tasks').delete().eq('id',id)
+      .then(({error})=>{ if(error){tasks=saved;render();showToast(sbErr(error),'err');}else showToast('Дело удалено'); });
     return;
   }
-  el.innerHTML = [...logs].reverse().map((l, ri) => {
-    const i = logs.length - 1 - ri;
-    const d = new Date(l.date);
-    const day = d.getDate();
-    const mon = d.toLocaleDateString('ru-RU', { month: 'short' });
-    return `
-      <div class="log-item">
-        <div class="log-date-box"><div class="ldd">${day}</div><div class="ldm">${mon}</div></div>
-        <div class="log-info">
-          <div class="log-type">${l.type}</div>
-          ${l.note ? `<div class="log-note">${l.note}</div>` : ''}
-        </div>
-        <button class="log-del" onclick="delLog(${i})" title="Удалить">✕</button>
-      </div>`;
-  }).join('');
-}
-
-function delLog(i) {
-  const logs = getLogs();
-  logs.splice(i, 1);
-  saveLogs(logs);
-  renderLog();
-}
-
-function openModal() {
-  const today = new Date().toISOString().split('T')[0];
-  document.getElementById('mDate').value = today;
-  document.getElementById('mNote').value = '';
-  document.getElementById('modalBg').classList.add('open');
-}
-function closeModal() {
-  document.getElementById('modalBg').classList.remove('open');
-}
-function saveLog() {
-  const date = document.getElementById('mDate').value;
-  const type = document.getElementById('mType').value;
-  const note = document.getElementById('mNote').value.trim();
-  if (!date) return;
-  const logs = getLogs();
-  logs.push({ date, type, note });
-  saveLogs(logs);
-  closeModal();
-  renderLog();
-}
-document.getElementById('modalBg').addEventListener('click', function(e) {
-  if (e.target === this) closeModal();
-});
-
-/* ─── WEEK BAR (localStorage) ─── */
-function getWeekDone() {
-  try { return JSON.parse(localStorage.getItem('gym_week') || '{}'); }
-  catch(e) { return {}; }
-}
-function toggleDay(day) {
-  const done = getWeekDone();
-  done[day] = !done[day];
-  localStorage.setItem('gym_week', JSON.stringify(done));
-  renderWeek();
-}
-function renderWeek() {
-  const done = getWeekDone();
-  document.querySelectorAll('.wc').forEach(el => {
-    const d = el.dataset.day;
-    el.classList.toggle('done', !!done[d]);
-  });
-}
-
-/* ─── TABS ─── */
-function showTab(id, btn) {
-  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('tab-' + id).classList.add('active');
-  btn.classList.add('active');
-}
-
-/* ─── ACCORDION ─── */
-function toggleAc(btn) {
-  const body = btn.nextElementSibling;
-  const isOpen = body.classList.contains('open');
-  btn.classList.toggle('open', !isOpen);
-  body.classList.toggle('open', !isOpen);
-}
-
-/* ─── REST TIMER ─── */
-let timerInterval = null;
-function startTimer(btn, seconds) {
-  if (timerInterval) clearInterval(timerInterval);
-  document.querySelectorAll('.timer-btn').forEach(b => {
-    b.classList.remove('running', 'expired');
-    if (b !== btn) b.textContent = '▶ Таймер';
-  });
-
-  let remaining = seconds;
-  btn.classList.add('running');
-  btn.classList.remove('expired');
-
-  function tick() {
-    if (remaining <= 0) {
-      clearInterval(timerInterval);
-      btn.classList.remove('running');
-      btn.classList.add('expired');
-      btn.textContent = '✓ Готово!';
-      try { new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBuVlVgpM7UxJFwUE1cj8fdya5+X0JFVa/s6sqURjM2S6X77uyqYjMuS6T77OmmXjMuS6T77OmjWS4vTKT77OmfVCwxTaP77umeUCsxTaT87umcTSsxTqP87umaTCsxTqP87umYSiwxTqP87ueWRysyT6L87ueURispT6H87uiURispT6H87uiSRispT6H87uiPRCkqT5787uiNRCsqT5787uiLQyssUJv/7uiIQCwtUJv/7uiGPisuUJn/7uiEPCsvUZj/7+eEOisvUZj/7+eBOCwwUZf/7+iANi0xUpb/7+h+NC0yUpX/7+h8Mi0yUpX/7+h6MC4zU5T/7+h4Li40U5P/8Oh3LC41VJL/8Oh1Ki42VJL/8Oh0KC44VZH/8Ohy'); }
-      catch(e){}
-      timerInterval = null;
-      return;
-    }
-    const m = Math.floor(remaining / 60);
-    const s = remaining % 60;
-    btn.textContent = `⏱ ${m}:${s.toString().padStart(2,'0')}`;
-    remaining--;
+  if(action==='status'){
+    const t=tasks.find(x=>x.id===id);if(!t) return;
+    const old=t.status; t.status=val; render();
+    sb.from('tasks').update({status:val}).eq('id',id)
+      .then(({error})=>{ if(error){t.status=old;render();showToast(sbErr(error),'err');}else showToast('Статус: '+STATUS_LABEL[val]); });
   }
-  tick();
-  timerInterval = setInterval(tick, 1000);
+}
+function closeCtxMenu(){ document.getElementById('ctxMenu').classList.remove('open');ctxTaskId=null; }
+
+// ── NOW LINE ───────────────────────────────────────────────────────────────
+function updateNowLine(){
+  document.querySelectorAll('.now-line').forEach(e=>e.remove());
+  const now=new Date(),idx=weekDays.findIndex(d=>ymd(d)===todayStr());if(idx<0) return;
+  const m=now.getHours()*60+now.getMinutes();if(m<DS*60||m>DE*60) return;
+  const col=document.querySelector('.day-col[data-i="'+idx+'"]');if(!col) return;
+  const line=document.createElement('div');line.className='now-line';line.style.top=((m-DS*60)/60*HH)+'px';
+  col.appendChild(line);
 }
 
-/* ─── SCROLL ANIMATIONS ─── */
-function applyFu() {
-  const els = document.querySelectorAll('.fu:not(.vis)');
-  const obs = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) { e.target.classList.add('vis'); obs.unobserve(e.target); }
-    });
-  }, { threshold: 0.06 });
-  els.forEach(el => obs.observe(el));
+// ── SLOT CLICK ─────────────────────────────────────────────────────────────
+function onSlotClick(e,date,hour){
+  if(e.target.closest('.task-block')) return;
+  openModal(date,m2t(hour*60),m2t(Math.min((hour+1)*60,DE*60)));
 }
 
-/* ─── NAV ─── */
-function toggleMobNav() { document.getElementById('navMob').classList.toggle('open'); }
-function closeMob() { document.getElementById('navMob').classList.remove('open'); }
+// ── MODAL ──────────────────────────────────────────────────────────────────
+function openModal(date,startT,endT){
+  editId=null;selStatus='pending';
+  document.getElementById('modalTitle').textContent='Новое дело';
+  document.getElementById('btnDelete').style.display='none';
+  document.getElementById('fTitle').value='';document.getElementById('fDesc').value='';
+  const today=todayStr(),max=new Date();max.setMonth(max.getMonth()+6);
+  const df=document.getElementById('fDate');df.value=date||today;df.min=today;df.max=ymd(max);
+  document.getElementById('fStart').value=startT||'';document.getElementById('fEnd').value=endT||'';
+  updateStatusBtns();document.getElementById('overlay').classList.add('open');
+  setTimeout(()=>document.getElementById('fTitle').focus(),120);
+}
+function openEditModal(id){
+  const t=tasks.find(x=>x.id===id);if(!t) return;
+  editId=id;selStatus=t.status||'pending';
+  document.getElementById('modalTitle').textContent='Редактировать дело';
+  document.getElementById('btnDelete').style.display='';
+  document.getElementById('fTitle').value=t.title;document.getElementById('fDesc').value=t.description||'';
+  const today=todayStr(),max=new Date();max.setMonth(max.getMonth()+6);
+  const df=document.getElementById('fDate');df.value=t.date||'';df.min=today;df.max=ymd(max);
+  document.getElementById('fStart').value=t.startTime||'';document.getElementById('fEnd').value=t.endTime||'';
+  updateStatusBtns();document.getElementById('overlay').classList.add('open');
+  setTimeout(()=>document.getElementById('fTitle').focus(),120);
+}
+function closeModal(){ document.getElementById('overlay').classList.remove('open'); }
+function overlayClick(e){ if(e.target===document.getElementById('overlay')) closeModal(); }
+function pickStatus(btn){ selStatus=btn.dataset.s; updateStatusBtns(); }
+function updateStatusBtns(){ document.querySelectorAll('.s-btn').forEach(b=>b.classList.toggle('active',b.dataset.s===selStatus)); }
 
-/* ─── INIT ─── */
-document.addEventListener('DOMContentLoaded', () => {
-  buildProgCards();
-  renderLog();
-  renderWeek();
-  applyFu();
+// ── SAVE TASK ──────────────────────────────────────────────────────────────
+function saveTask(){
+  const title=document.getElementById('fTitle').value.trim();
+  if(!title){ showToast('Введите название дела','err'); return; }
+  const date=document.getElementById('fDate').value;
+  const startT=document.getElementById('fStart').value;
+  const endT=document.getElementById('fEnd').value;
+  if(startT&&endT&&t2m(endT)<=t2m(startT)){ showToast('Время окончания должно быть позже начала','err'); return; }
+  if(startT&&endT&&t2m(endT)>DE*60){ showToast('Время выходит за пределы суток','err'); return; }
+  if(date&&startT&&checkOverlap(editId||'__new__',date,startT,endT||null)){ showToast('Это время уже занято другим делом','err'); return; }
 
-  // Smooth highlight active nav on scroll
-  const sections = document.querySelectorAll('section[id]');
-  const navAs = document.querySelectorAll('.nav-links a');
-  const obs = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        navAs.forEach(a => a.style.color = '');
-        const active = document.querySelector(`.nav-links a[href="#${e.target.id}"]`);
-        if (active) active.style.color = 'var(--acc)';
+  const data={ title, date:date||null, startTime:startT||null, endTime:endT||null, description:document.getElementById('fDesc').value.trim(), status:selStatus };
+
+  if(editId){
+    const t=tasks.find(x=>x.id===editId); if(t) Object.assign(t,data);
+    closeModal(); render();
+    sb.from('tasks').update(toDb(data)).eq('id',editId)
+      .then(({error})=>{ if(error) showToast(sbErr(error),'err'); else showToast('Дело сохранено'); });
+  } else {
+    const tempId='tmp-'+uid();
+    tasks.push({id:tempId,...data}); closeModal(); render();
+    sb.from('tasks').insert({...toDb(data),user_id:currentUser.id}).select().single()
+      .then(({data:saved,error})=>{
+        if(error){ tasks=tasks.filter(t=>t.id!==tempId); render(); showToast(sbErr(error),'err'); return; }
+        const i=tasks.findIndex(t=>t.id===tempId);
+        if(i!==-1){ tasks[i]=fromDb(saved); render(); }
+        showToast('Дело создано');
+      });
+  }
+}
+function deleteEditing(){
+  if(!editId) return;
+  const id=editId,saved=tasks.slice();
+  tasks=tasks.filter(t=>t.id!==id); closeModal(); render();
+  sb.from('tasks').delete().eq('id',id)
+    .then(({error})=>{ if(error){tasks=saved;render();showToast(sbErr(error),'err');}else showToast('Дело удалено'); });
+}
+
+// ── DRAG ───────────────────────────────────────────────────────────────────
+function onDragStart(e,id){
+  if(e.button!==0||e.target.closest('.resize-handle')) return;
+  e.preventDefault();e.stopPropagation();
+  const block=document.getElementById('tb-'+id),task=tasks.find(t=>t.id===id);if(!block||!task) return;
+  const rect=block.getBoundingClientRect();
+  drag={id,offsetX:e.clientX-rect.left,offsetY:e.clientY-rect.top};
+  block.classList.add('is-dragging');
+  document.body.style.userSelect='none';
+  document.body.style.cursor='grabbing';
+  ghostEl=document.createElement('div');ghostEl.className='task-block drag-ghost';
+  ghostEl.innerHTML=`<div class="tb-title">${esc(task.title)}</div>`;
+  ghostEl.style.left=(e.clientX-drag.offsetX)+'px';ghostEl.style.top=(e.clientY-drag.offsetY)+'px';
+  document.body.appendChild(ghostEl);
+}
+function onMouseMove(e){
+  if(drag||rz) e.preventDefault();
+  if(drag){
+    ghostEl.style.left=(e.clientX-drag.offsetX)+'px';ghostEl.style.top=(e.clientY-drag.offsetY)+'px';
+    document.querySelectorAll('.drop-ind').forEach(d=>d.style.display='none');
+    const target=getDragTarget(e.clientX,e.clientY);
+    if(target){
+      const di=document.getElementById('di-'+target.colIdx);if(!di) return;
+      const task=tasks.find(t=>t.id===drag.id);
+      const dur=task.endTime?t2m(task.endTime)-t2m(task.startTime):60;
+      const cs=clamp(target.startM,DS*60,DE*60-dur);
+      const valid=!checkOverlap(drag.id,target.date,m2t(cs),m2t(cs+dur));
+      di.style.cssText=`display:block;top:${(cs-DS*60)/60*HH}px;height:${Math.max(22,dur/60*HH)}px;border-color:${valid?'var(--acc)':'var(--err)'};background:${valid?'var(--acc-d)':'var(--err-d)'}`;
+    }
+  }
+  if(rz){
+    const dy=e.clientY-rz.startY;
+    const newEndM=clamp(rz.origEndM+snapM(dy/HH*60),rz.origStartM+SNAP,DE*60);
+    const block=document.getElementById('tb-'+rz.id);
+    if(block) block.style.height=Math.max(22,(newEndM-rz.origStartM)/60*HH)+'px';
+    rz.newEndM=newEndM;
+  }
+}
+function onMouseUp(e){
+  document.body.style.userSelect='';
+  document.body.style.cursor='';
+  if(drag){
+    document.querySelectorAll('.drop-ind').forEach(d=>d.style.display='none');
+    if(ghostEl){ghostEl.remove();ghostEl=null;}
+    const block=document.getElementById('tb-'+drag.id);
+    if(block) block.classList.remove('is-dragging');
+    const target=getDragTarget(e.clientX,e.clientY);
+    if(target){
+      const task=tasks.find(t=>t.id===drag.id);
+      const dur=task.endTime?t2m(task.endTime)-t2m(task.startTime):60;
+      const fs=clamp(target.startM,DS*60,DE*60-dur),ne=m2t(fs+dur);
+      if(!checkOverlap(drag.id,target.date,m2t(fs),ne)){
+        const prev={date:task.date,startTime:task.startTime,endTime:task.endTime};
+        task.date=target.date;task.startTime=m2t(fs);task.endTime=ne;
+        render();
+        sb.from('tasks').update(toDb(task)).eq('id',task.id)
+          .catch(()=>{Object.assign(task,prev);render();});
+      } else {
+        showToast('Это время уже занято','err');render();
       }
-    });
-  }, { threshold: 0.45 });
-  sections.forEach(s => obs.observe(s));
-});
+    } else render();
+    drag=null;
+  }
+  if(rz){
+    const task=tasks.find(t=>t.id===rz.id);
+    const newEndT=m2t(rz.newEndM||rz.origEndM);
+    if(!checkOverlap(rz.id,task.date,task.startTime,newEndT)){
+      const prevEnd=task.endTime; task.endTime=newEndT; render();
+      sb.from('tasks').update(toDb(task)).eq('id',task.id)
+        .catch(()=>{task.endTime=prevEnd;render();});
+    } else {
+      showToast('Это время уже занято','err');render();
+    }
+    rz=null;
+  }
+}
+function getDragTarget(cx,cy){
+  const cols=document.querySelectorAll('.day-col');
+  const scroll=document.getElementById('calScroll'),scrollRect=scroll.getBoundingClientRect();
+  for(const col of cols){
+    const rect=col.getBoundingClientRect();
+    if(cx>=rect.left&&cx<rect.right&&cy>=scrollRect.top&&cy<scrollRect.bottom){
+      const taskTopY=drag?cy-drag.offsetY:cy;
+      const relY=taskTopY-rect.top;
+      const startM=clamp(snapM(DS*60+relY/HH*60),DS*60,DE*60);
+      return{colIdx:parseInt(col.dataset.i),date:col.dataset.date,startM};
+    }
+  }
+  return null;
+}
+
+// ── RESIZE ─────────────────────────────────────────────────────────────────
+function onResizeStart(e,id){
+  e.preventDefault();e.stopPropagation();
+  const task=tasks.find(t=>t.id===id);if(!task||!task.startTime) return;
+  document.body.style.userSelect='none';
+  document.body.style.cursor='ns-resize';
+  rz={id,startY:e.clientY,origStartM:t2m(task.startTime),origEndM:task.endTime?t2m(task.endTime):t2m(task.startTime)+60,newEndM:task.endTime?t2m(task.endTime):t2m(task.startTime)+60};
+}
+
+// ── TOAST ──────────────────────────────────────────────────────────────────
+let toastTimer=null;
+function showToast(msg,type=''){
+  const el=document.getElementById('toast');
+  el.textContent=msg;el.className='toast'+(type?' '+type:'')+' show';
+  clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),2600);
+}
+
+// ── INIT ───────────────────────────────────────────────────────────────────
+async function init(){
+  applyTheme();
+  document.addEventListener('mousemove',onMouseMove);
+  document.addEventListener('mouseup',onMouseUp);
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape'){closeModal();closeCtxMenu();} });
+  document.addEventListener('click',e=>{ if(!e.target.closest('.ctx-menu')) closeCtxMenu(); });
+  document.addEventListener('contextmenu',e=>{ if(!e.target.closest('.task-block,.allday-chip,.fp-item,.all-card')) closeCtxMenu(); });
+  ['aUsername','aPassword','aConfirm'].forEach(id=>{
+    document.getElementById(id).addEventListener('keydown',e=>{ if(e.key==='Enter') submitAuth(); });
+  });
+
+  // Check existing session
+  const {data:{session}}=await sb.auth.getSession();
+  if(session){
+    try {
+      await loadUserAndTasks(session.user);
+      showApp(); render();
+      setTimeout(()=>{
+        const now=new Date();
+        document.getElementById('calScroll').scrollTop=Math.max(0,(now.getHours()*60+now.getMinutes())/60*HH-100);
+      },150);
+    } catch {
+      showAuth();
+    }
+  } else {
+    showAuth();
+  }
+  setInterval(updateNowLine,60000);
+}
+
+init();
 </script>
 </body>
 </html>
